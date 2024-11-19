@@ -1,0 +1,167 @@
+/* Inicio.css */
+.inicio {
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 1s ease, transform 1s ease;
+}
+
+.inicio.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Contenedor principal */
+.content {
+  text-align: center;
+  z-index: 1;
+}
+
+/* Logo animado */
+.logo-container {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.logo-outer-circle {
+  width: 128px;
+  height: 128px;
+  border: 4px solid #3b82f6;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin: 0 auto;
+}
+
+.logo-inner-circle {
+  width: 96px;
+  height: 96px;
+  border: 4px solid #93c5fd;
+  border-radius: 50%;
+  position: absolute;
+  animation: spin 10s linear infinite;
+}
+
+.logo-core {
+  width: 64px;
+  height: 64px;
+  background: #3b82f6;
+  border-radius: 50%;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+/* Título */
+.title {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1.5rem;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: #ed9224;
+  transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+/* Subtítulo */
+.subtitle {
+  font-size: 1.25rem;
+  color: #ed9224;
+  margin-bottom: 2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Animaciones */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.95);
+    opacity: 0.8;
+  }
+}
+
+/* Media queries para responsividad */
+@media (max-width: 768px) {
+  .title {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+  }
+
+  .logo-outer-circle {
+    width: 96px;
+    height: 96px;
+  }
+
+  .logo-inner-circle {
+    width: 72px;
+    height: 72px;
+  }
+
+  .logo-core {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+/* Agregar esto a tu archivo CSS existente */
+
+.title.fade-in {
+  opacity: 1;
+}
+
+.title.fade-out {
+  opacity: 0;
+}
+
+.title.fade-in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.title.fade-out {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.logo-img {
+  max-width: 300px;
+  height: auto;
+}
