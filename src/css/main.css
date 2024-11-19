@@ -1,0 +1,26 @@
+:root {
+  --color-principal: #ed9224;
+  --color-card: rgba(186, 183, 180, 0.3);
+  --color-secundario: #f5d9ab;
+  --color-gris: rgba(128, 128, 128, 1);
+}
+
+@font-face {
+  font-family: "Futura";
+  src: url("../assets/fonts/futura.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Futura", sans-serif;
+}
+
+.active {
+  color: var(--color-principal);
+}
+
+.nav-link:hover {
+  color: var(--color-principal);
+}
