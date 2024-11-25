@@ -15,6 +15,11 @@ import FormularioConfiguracionesGenerales from "./pages/admin/configuraciones/fo
 import FormularioConfiguracionVentasMayoreo from "./pages/admin/configuraciones/formularioConfiguracionVentasMayoreo";
 import FormularioReglasPuntos from "./pages/admin/puntos/formularioReglasPuntos";
 import FormularioCupones from "./pages/admin/cupones/formularioCupones";
+import Profile from "./pages/(perfil)/profile";
+import Puntosfidelidad from "./pages/(perfil)/puntosFidelidad";
+import MisSolicitudesCambioAgente from "./pages/(perfil)/misSolicitudesCambioAgente";
+import Agente from "./pages/(perfil)/agente";
+import DetalleSolicitudCambioAgente from "./pages/admin/cambioAgente/detalleSolicitudCambioAgente";
 
 export default function App() {
   return (
@@ -26,9 +31,18 @@ export default function App() {
           <Route element={<MainLayout />}>
             <Route path="/inicio" element={<Inicio />} />
 
+            <Route path="/(perfil)/profile" element={<Profile />} />
+            <Route path="/(perfil)/puntosFidelidad" element={<Puntosfidelidad />} />
+            <Route path="/(perfil)/misSolicitudesCambioAgente" element={<MisSolicitudesCambioAgente />} />
+            <Route path="/(perfil)/agente" element={<Agente />} />
+
             <Route
               path="/(admin)/cambioAgente/solicitudesCambioAgente"
               element={<SolicitudesCambioAgente />}
+            />
+            <Route
+              path="/(admin)/cambioAgente/detalleSolicitudCambioAgente"
+              element={<DetalleSolicitudCambioAgente />}
             />
 
             <Route
@@ -40,6 +54,7 @@ export default function App() {
 
             <Route path="/(admin)/configuraciones/configuracionVentasMayoreo" element={<ConfiguracionVentasMayoreo />} />
             <Route path="/(admin)/configuraciones/formularioConfiguracionVentasMayoreo" element={<FormularioConfiguracionVentasMayoreo />} />
+
             <Route path="/(admin)/puntos/reglaPuntos" element={<ReglaPuntos />} />
             <Route path="/(admin)/puntos/formularioReglasPuntos" element={<FormularioReglasPuntos />} />
 

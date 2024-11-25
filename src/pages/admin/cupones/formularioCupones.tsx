@@ -61,6 +61,11 @@ const FormularioCupones: React.FC = () => {
 
   const handleSubmit = async () => {
     try {
+      if (formValues.tipo === 1 && formValues.valor > 100) {
+        toast.error("El valor del cupón no puede ser mayor que 100%.");
+        return;
+      }
+
       const fecha = new Date();
       const fechaFormatoAPI = fecha.toISOString();
 

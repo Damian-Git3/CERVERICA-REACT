@@ -58,6 +58,9 @@ export default function Navbar() {
     {
       label: "Perfil",
       icon: "pi pi-user",
+      command: () => {
+        navigate("/(perfil)/profile");
+      },
     },
     {
       label: "Cerrar sesión",

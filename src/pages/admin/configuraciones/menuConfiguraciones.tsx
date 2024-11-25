@@ -43,7 +43,7 @@ const MenuConfiguraciones = () => {
         {modules.map((module, index) => (
           <div
             key={module.name}
-            className="module-card"
+            className="module-card-config"
             onClick={() => handleCardClick(module.route)} // Manejador de clic en la tarjeta
           >
             <div className="module-link">

@@ -1,13 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Text, View, Button, Modal, TouchableOpacity } from "react-native";
-import Toast from "react-native-toast-message";
-import { useNavigation } from "@react-navigation/native"; // Importación añadida
-import AuthContext from "@/context/Auth/AuthContext";
-import { StyleSheet, TextInput } from "react-native";
-import useCambioAgente from "@/hooks/useCambioAgente";
-import { router, useLocalSearchParams } from "expo-router";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate, useLocation } from "react-router-dom";
 import { ActualizarSolicitudCambioAgenteDTO } from "@/dtos/cambioAgente";
-import { Picker } from "@react-native-picker/picker";
+import useCambioAgente from "../../../hooks/useCambioAgente";
+import useSessionStore from "../../../stores/useSessionStore";
+import useAccount from "../../../hooks/useAccount";
+import { Select } from "antd";
+import "./detalleSolicitudCambioAgente.css"
 
 const MotivoCambioModal = ({ modalVisible, setModalVisible, onSubmit }) => {
   const [motivo, setMotivo] = useState("");
@@ -15,64 +15,62 @@ const MotivoCambioModal = ({ modalVisible, setModalVisible, onSubmit }) => {
   const isSubmitDisabled = motivo.trim() === ""; // Verificar si el motivo está vacío
 
   return (
-    <Modal
-      animationType="slide"
-      transparent={true}
-      visible={modalVisible}
-      onRequestClose={() => setModalVisible(!modalVisible)}
-    >
-      <View style={styles.modalOverlay}>
-        <View style={styles.modalContent}>
-          <Text style={styles.modalTitle}>Motivo de rechazo</Text>
-          <TextInput
+    modalVisible && (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2 className="modal-title">Motivo de rechazo</h2>
+          <textarea
             placeholder="Escriba el motivo de rechazo de la solicitud aquí"
-            style={styles.input}
+            className="input-modal"
             value={motivo}
-            onChangeText={setMotivo}
-            multiline={true}
-            numberOfLines={4}
+            onChange={(e) => setMotivo(e.target.value)}
+            rows="4"
           />
 
           {isSubmitDisabled && (
-            <Text style={styles.errorText}>Este campo es obligatorio.</Text> // Mensaje de error opcional
+            <p className="error-text">Este campo es obligatorio.</p>
           )}
 
-          <TouchableOpacity
-            onPress={() => {
-              onSubmit(motivo);
-              setModalVisible(false);
-            }}
-            style={[
-              styles.submitButton,
-              isSubmitDisabled && styles.disabledButton,
-            ]} // Estilo para el botón deshabilitado
-            disabled={isSubmitDisabled} // Deshabilitar el botón si motivo está vacío
-          >
-            <Text style={styles.submitButtonText}>Rechazar</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => setModalVisible(false)}
-            style={styles.closeButton}
-          >
-            <Text style={styles.closeButtonText}>Cerrar</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Modal>
+          <div className="container-buttons-solicitud-agente">
+            <button
+              onClick={() => {
+                onSubmit(motivo);
+                setModalVisible(false);
+              }}
+              className={`submit-button ${isSubmitDisabled ? "disabled" : ""}`}
+              disabled={isSubmitDisabled}
+            >
+              Rechazar
+            </button>
+            <button
+              onClick={() => setModalVisible(false)}
+              className="close-button"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   );
 };
 
 const DetalleSolicitudCambioAgente = () => {
-  const { session } = useContext(AuthContext);
-  const params = useLocalSearchParams();
-  const solicitud = params?.solicitud ? JSON.parse(params.solicitud) : null;
+  const { session, cerrarSesion: cerrarSesionSessionStore } = useSessionStore();
+  const { cerrarSesion } = useAccount();
+  const navigate = useNavigate();
+  const location = useLocation();
+  const solicitud = location?.state?.solicitud || null; // Usando react-router
+
+  console.log("solicitud")
+  console.log(solicitud)
 
   const { actualizarSolicitudCambioAgente, agentesVentas, getAgentes } =
     useCambioAgente();
 
   const [selectedAgente, setSelectedAgente] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false); // Definición del estado para el modal
+  const [modalVisible, setModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,11 +82,7 @@ const DetalleSolicitudCambioAgente = () => {
 
   const handleAceptar = async () => {
     if (selectedAgente === solicitud.idAgenteVentaActual) {
-      Toast.show({
-        type: "error",
-        text1: "Error: Mismo agente",
-        text2: "El agente nuevo no puede ser el mismo que el agente actual.",
-      });
+      toast.error("El agente nuevo no puede ser el mismo que el agente actual.");
       return; // Detener ejecución si son iguales
     }
 
@@ -109,7 +103,7 @@ const DetalleSolicitudCambioAgente = () => {
     // Formatear como cadena ISO
     const fechaFormatoAPI = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 
-    const solicitudActualizada: ActualizarSolicitudCambioAgenteDTO = {
+    const solicitudActualizada = {
       id: solicitud.id,
       idMayorista: solicitud.idMayorista,
       estatus: "Aceptado",
@@ -127,19 +121,11 @@ const DetalleSolicitudCambioAgente = () => {
       );
 
       if (updatedSolicitud) {
-        Toast.show({
-          type: "success",
-          text1: "Solicitud aceptada",
-          text2: "La solicitud ha sido aceptada con éxito.",
-        });
-        router.back();
+        toast.success("La solicitud ha sido aceptada con éxito.");
+        navigate(-1); // Para regresar a la página anterior
       }
     } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "No se pudo aceptar la solicitud.",
-      });
+      toast.error("No se pudo aceptar la solicitud.");
     }
   };
 
@@ -147,25 +133,31 @@ const DetalleSolicitudCambioAgente = () => {
     setModalVisible(true); // Mostrar el modal al presionar "Rechazar"
   };
 
-  const handleRechazar = async (motivoRechazo: string) => {
+  const convertAndFormatDate = (dateString) => {
+    const date = new Date(dateString);
+
+    if (isNaN(date.getTime())) {
+      console.error("Fecha inválida:", dateString);
+      return "Fecha inválida";
+    }
+
+    const options = {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true,
+    };
+
+    return date.toLocaleString("es-ES", options);
+  };
+
+  const handleRechazar = async (motivoRechazo) => {
     const fechaSolicitud = new Date();
+    const fechaFormatoAPI = fechaSolicitud.toISOString(); // Formatear como cadena ISO
 
-    // Obtener componentes de la fecha
-    const year = fechaSolicitud.getFullYear();
-    const month = String(fechaSolicitud.getMonth() + 1).padStart(2, "0"); // Mes comienza en 0
-    const day = String(fechaSolicitud.getDate()).padStart(2, "0");
-    const hours = String(fechaSolicitud.getHours()).padStart(2, "0");
-    const minutes = String(fechaSolicitud.getMinutes()).padStart(2, "0");
-    const seconds = String(fechaSolicitud.getSeconds()).padStart(2, "0");
-    const milliseconds = String(fechaSolicitud.getMilliseconds()).padStart(
-      3,
-      "0"
-    );
-
-    // Formatear como cadena ISO
-    const fechaFormatoAPI = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
-
-    const solicitudActualizada: ActualizarSolicitudCambioAgenteDTO = {
+    const solicitudActualizada = {
       id: solicitud.id,
       idMayorista: solicitud.idMayorista,
       estatus: "Rechazada",
@@ -183,172 +175,62 @@ const DetalleSolicitudCambioAgente = () => {
       );
 
       if (updatedSolicitud) {
-        Toast.show({
-          type: "success",
-          text1: "Solicitud rechazada",
-          text2: "La solicitud ha sido rechazada.",
-        });
-        router.back();
+        toast.success("La solicitud ha sido rechazada.");
+        navigate(-1);
       }
     } catch (error) {
-      Toast.show({
-        type: "error",
-        text1: "Error",
-        text2: "No se pudo rechazar la solicitud.",
-      });
+      toast.error("No se pudo rechazar la solicitud.");
     }
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>Detalle de Solicitud</Text>
-      <Text>Solicitante: {solicitud.nombreContacto}</Text>
-      <Text>Agente Actual: {solicitud.agenteVentaActualNombre}</Text>
-      <Text>Motivo: {solicitud.motivo}</Text>
-      <Text>Estatus: {solicitud.estatus}</Text>
+    <div className="container">
+      <h1 className="header">Detalle de Solicitud</h1>
+      <p>Solicitante: {solicitud.nombreContacto}</p>
+      <p>Agente Actual: {solicitud.agenteVentaActualNombre}</p>
+      <p>Motivo: {solicitud.motivo}</p>
+      <p>Fecha de la solicitud: {convertAndFormatDate(solicitud.fechaSolicitud)}</p>
+      <p>Estatus: {solicitud.estatus}</p>
 
-      <Button
-        title={
-          showPicker ? "Ocultar Selección" : "Seleccionar Agente (Opcional)"
-        }
-        onPress={() => setShowPicker(!showPicker)}
-        color="#2196F3"
-      />
+      <button
+        onClick={() => setShowPicker(!showPicker)}
+        className="button"
+      >
+        {showPicker ? "Ocultar Selección" : "Seleccionar Agente (Opcional)"}
+      </button>
 
       {showPicker && (
-        <Picker
-          selectedValue={selectedAgente}
-          onValueChange={(itemValue) => setSelectedAgente(itemValue)}
-          style={styles.picker}
+        <Select
+          style={{ marginTop: "10px", width: "300px", height: "50px" }}
+          value={selectedAgente || ""}
+          onChange={(value) => setSelectedAgente(value)}
+          className="picker"
         >
-          <Picker.Item label="Seleccionar Agente" value={null} />
+          <Select.Option value="">Seleccionar Agente</Select.Option>
           {agentesVentas.map((agente) => (
-            <Picker.Item
-              key={agente.id}
-              label={agente.fullName}
-              value={agente.id}
-            />
+            <Select.Option key={agente.id} value={agente.id}>
+              {agente.fullName}
+            </Select.Option>
           ))}
-        </Picker>
+        </Select>
       )}
 
-      <View style={styles.buttonContainer}>
-        <View style={styles.buttonWrapper}>
-          <Button title="Aceptar" onPress={handleAceptar} color="#4CAF50" />
-        </View>
-        <View style={styles.buttonWrapper}>
-          <Button
-            title="Rechazar"
-            onPress={handleMotivoRechazo}
-            color="#F44336"
-          />
-        </View>
-      </View>
+      <div className="button-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "50px" }}>
+        <button onClick={handleAceptar} className="button" style={{ backgroundColor: "green" }}>
+          Aceptar
+        </button>
+        <button onClick={handleMotivoRechazo} className="button" style={{ backgroundColor: "red" }}>
+          Rechazar
+        </button>
+      </div>
 
       <MotivoCambioModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        onSubmit={handleRechazar} // Pasar el motivo al onSubmit
+        onSubmit={handleRechazar}
       />
-    </View>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#F8F8F8",
-  },
-  header: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    textAlign: "center",
-    color: "#333",
-  },
-  picker: {
-    height: 50,
-    width: "100%",
-    marginVertical: 10,
-  },
-  buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-    marginTop: 10,
-  },
-  modalOverlay: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContent: {
-    width: "100%",
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 20,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  modalTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  closeButton: {
-    marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: "#2196F3",
-    borderRadius: 5,
-  },
-  closeButtonText: {
-    color: "white",
-    fontSize: 16,
-  },
-  submitButton: {
-    marginTop: 20,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    backgroundColor: "#F44336",
-    borderColor: "transparent",
-    borderRadius: 5,
-  },
-  submitButtonText: {
-    color: "white",
-    fontSize: 16,
-  },
-  input: {
-    height: 100,
-    borderColor: "#cccccc",
-    borderWidth: 1,
-    borderRadius: 8,
-    padding: 10,
-    textAlignVertical: "top",
-    fontSize: 16,
-    color: "#333333",
-    backgroundColor: "#f9f9f9",
-  },
-  disabledButton: {
-    backgroundColor: "lightgray", // Cambiar color cuando está deshabilitado
-  },
-  errorText: {
-    color: "red",
-    marginBottom: 10,
-  },
-  buttonWrapper: {
-    flex: 1,
-    marginHorizontal: 5,
-  },
-});
 
 export default DetalleSolicitudCambioAgente;

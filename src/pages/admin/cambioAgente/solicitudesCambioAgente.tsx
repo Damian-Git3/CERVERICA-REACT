@@ -9,7 +9,6 @@ import useCambioAgente from "../../../hooks/useCambioAgente";
 import "./SolicitudesCambioAgente.css"; // Importa el archivo CSS
 
 const SolicitudesCambioAgente = () => {
-  const { session } = useContext(AuthContext);
   const { getSolicitudes, solicitudesCambioAgente, cargando } = useCambioAgente();
   const [noSolicitudes, setNoSolicitudes] = useState(false);
   const navigate = useNavigate(); // Usamos useNavigate de react-router-dom
@@ -25,7 +24,7 @@ const SolicitudesCambioAgente = () => {
 
   const handleVerSolicitudes = (solicitud) => {
     if (solicitud) {
-      navigate("/admin/detalleSolicitudCambioAgente", { state: { solicitud } });
+      navigate("/(admin)/cambioAgente/detalleSolicitudCambioAgente", { state: { solicitud } });
     } else {
       toast.error("Error al acceder a los detalles: No se pudo acceder a la información del usuario.");
     }

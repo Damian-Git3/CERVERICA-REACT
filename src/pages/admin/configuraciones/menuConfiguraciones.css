@@ -67,7 +67,7 @@
   justify-content: space-between;
 }
 
-.module-card {
+.module-card-config {
   background-color: #fff;
   width: 30%;
   /* Dos columnas */
@@ -83,7 +83,7 @@
   transition-duration: .5s;
 }
 
-.module-card:hover {
+.module-card-config:hover {
   transform: scale(1.1);
 }
 

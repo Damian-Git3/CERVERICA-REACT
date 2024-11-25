@@ -106,7 +106,11 @@ export default function useCambioAgente() {
       });
     } catch (error) {
       console.error("Error al obtener solicitudes:", error);
-      toast.error("No se pudieron cargar los agentes de ventas.");
+      if (error.response && error.response.status === 404) {
+        console.error("No hay solicitudes:", error);
+      } else {
+        toast.error("No se pudieron cargar las solicitudes.");
+      }
     }
   };
 
