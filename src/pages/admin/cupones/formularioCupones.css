@@ -1,0 +1,54 @@
+/* Contenedor principal */
+.container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: #fff;
+    flex: 1;
+  }
+  
+  /* Título */
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  /* Etiquetas */
+  .label {
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 15px;
+  }
+  
+  /* Campo de entrada */
+  .input {
+    height: 40px;
+    border-color: #ccc;
+    border-width: 1px;
+    border-radius: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin-bottom: 10px;
+    font-size: 16px;
+  }
+  
+  /* Botón */
+  .button {
+    background-color: #4caf50;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 5px;
+    margin-top: 20px;
+  }
+  
+  /* Texto dentro del botón */
+  .buttonText {
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    text-align: center;
+  }
+  
