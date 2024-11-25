@@ -1,0 +1,130 @@
+/* Contenedor principal */
+.menu-configuraciones {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 15px;
+}
+
+/* Encabezado */
+.header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  text-align: center;
+  margin: 0 auto;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Sección de información del usuario */
+.user-info {
+  background-color: #fff;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-radius: 10px;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(237, 146, 36, 0.5);
+  margin-inline-start: 20px;
+  display: flex;
+  flex-direction: row;
+}
+
+/* Círculo con inicial */
+.circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  background-color: #007bff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.initial {
+  color: #fff;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+/* Nombre del usuario */
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Grid de módulos */
+.modules-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.module-card {
+  background-color: #fff;
+  width: 30%;
+  /* Dos columnas */
+  padding: 20px;
+  margin-bottom: 15px;
+  border-radius: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition-duration: .5s;
+}
+
+.module-card:hover {
+  transform: scale(1.1);
+}
+
+/* Nombre del módulo */
+.module-name {
+  margin-top: 10px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-align: center;
+  font-family: -apple-system, "San Francisco", BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+  color: black;
+}
+
+/* Botón de cerrar sesión */
+.logout-button {
+  margin-top: 20px;
+  padding: 12px 0;
+  background-color: #212121;
+  /* Color oscuro */
+  border-radius: 5px;
+  align-items: center;
+  margin-bottom: 60px;
+}
+
+.logout-button-text {
+  color: #fff;
+  font-size: 16px;
+  font-weight: bold;
+}
+
+/* Estilo personalizado para botones */
+.custom-button {
+  margin-top: 10px;
+  margin-bottom: 50px;
+}
+
+.module-link {
+  text-decoration: none;
+  font-size: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}

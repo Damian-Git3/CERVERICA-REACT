@@ -1,6 +1,6 @@
 import { useReducer, useState } from "react";
 import axios from "axios";
-import { SessionDTO } from "../DTOs/SessionDTO";
+import { SessionDTO } from "../dtos/SessionDTO";
 import useSessionStore from "../stores/useSessionStore"; // Importa el store
 
 const END_POINT = "/Account";
