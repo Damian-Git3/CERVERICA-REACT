@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import { SessionDTO } from "../DTOs/SessionDTO";
+import { SessionDTO } from "../dtos/SessionDTO";
 
 interface SessionState {
   session: SessionDTO | null;
