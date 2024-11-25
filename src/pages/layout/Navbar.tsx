@@ -70,6 +70,34 @@ export default function Navbar() {
       template: templateItem,
       rol: ["Admin", "Agente"],
     },
+    {
+      label: "Notificaciones",
+      icon: "pi pi-bell",
+      url: "/notificaciones",
+      template: templateItem,
+      rol: ["Admin","Agente", "Mayorista", "Cliente", "Operador"],
+    },
+    {
+      label: "Mesa de Ayuda",
+      icon: "pi pi-comments",
+      url: "/mesa-ayuda-cliente",
+      template: templateItem,
+      rol: ["Mayorista", "Cliente"],
+    },
+    {
+      label: "Mesa de Ayuda",
+      icon: "pi pi-comments",
+      url: "/mesa-ayuda-agente",
+      template: templateItem,
+      rol: ["Agente"],
+    },
+    {
+      label: "Pagos",
+      icon: "pi pi-dollar",
+      url: "/pagos",
+      template: templateItem,
+      rol: ["Mayorista"],
+    },
   ];
 
   const links = allLinks.filter((item) => {
