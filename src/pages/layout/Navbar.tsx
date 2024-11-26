@@ -17,22 +17,126 @@ interface Module {
 }
 
 const modules: Module[] = [
-  { name: "Vendedores", icon: "pi pi-users", route: "/(admin)/ventas", roles: ["Admin"] },
-  { name: "Clientes Mayoristas", icon: "pi pi-users", route: "/(admin)/ventas", roles: ["Admin"] },
-  { name: "Precios", icon: "pi pi-dollar", route: "/(admin)/HistorialPrecios", roles: ["Admin"] },
-  { name: "Descuentos", icon: "pi pi-percent", route: "/(admin)/ventas", roles: ["Mayorista"] },
-  { name: "Pagos", icon: "pi pi-dollar", route: "/(mayorista)/pagos", roles: ["Mayorista"] },
-  { name: "Dashboard", icon: "pi pi-chart-bar", route: "/(admin)/(dashboard)", roles: ["Admin"] },
-  { name: "Notificaciones", icon: "pi pi-bell", route: "/(crm)/(notificacion)", roles: ["Admin", "Mayorista", "Agente", "Cliente"] },
-  { name: "Ventas", icon: "pi pi-shopping-cart", route: "/(admin)/ventas", roles: ["Admin"] },
-  { name: "Solicitud Asistencia Agente", icon: "pi pi-smile", route: "/(crm)/(agente)/solicitud-asistencia", roles: ["Admin", "Agente"] },
-  { name: "Solicitud Asistencia Cliente", icon: "pi pi-smile", route: "/(crm)/(cliente)/solicitud-asistencia", roles: ["Cliente", "Mayorista"] },
-  { name: "Solicitud Cambio Agente", icon: "pi pi-exchange", route: "/(admin)/cambioAgente/solicitudesCambioAgente", roles: ["Admin"] },
-  { name: "Gestión de Configuraciones", icon: "pi pi-cog", route: "/(admin)/configuraciones/menuConfiguraciones", roles: ["Admin"] },
-  { name: "Solicitudes mayoristas", icon: "pi pi-exchange", route: "/(agente)/(solicitudes-mayoristas)/lista-solicitudes", roles: ["Agente"] },
-  { name: "Cupones", icon: "pi pi-tags", route: "/(admin)/cupones/cupones", roles: ["Admin"] },
-  { name: "Mis solicitudes", icon: "pi pi-tags", route: "/(mayorista)/(solicitudes-mayoristas)/lista-solicitudes", roles: ["Mayorista"] },
-  { name: "Mayoristas Asignados", icon: "pi pi-users", route: "/(agente)/mayoristas-asignados", roles: ["Agente"] },
+  {
+    name: "Vendedores",
+    icon: "pi pi-users",
+    route: "/(admin)/ventas",
+    roles: ["Admin"],
+  },
+  {
+    name: "Clientes Mayoristas",
+    icon: "pi pi-users",
+    route: "/(admin)/ventas",
+    roles: ["Admin"],
+  },
+  {
+    name: "Precios",
+    icon: "pi pi-dollar",
+    route: "/(admin)/HistorialPrecios",
+    roles: ["Admin"],
+  },
+  {
+    name: "Descuentos",
+    icon: "pi pi-percent",
+    route: "/(admin)/ventas",
+    roles: ["Mayorista"],
+  },
+  {
+    name: "Pagos",
+    icon: "pi pi-dollar",
+    route: "/(mayorista)/pagos",
+    roles: ["Mayorista"],
+  },
+  {
+    name: "Dashboard",
+    icon: "pi pi-chart-bar",
+    route: "/(admin)/(dashboard)",
+    roles: ["Admin"],
+  },
+  {
+    name: "Notificaciones",
+    icon: "pi pi-bell",
+    route: "/(crm)/(notificacion)",
+    roles: ["Admin", "Mayorista", "Agente", "Cliente"],
+  },
+  {
+    name: "Ventas",
+    icon: "pi pi-shopping-cart",
+    route: "/(admin)/ventas",
+    roles: ["Admin"],
+  },
+  {
+    name: "Solicitud Asistencia Agente",
+    icon: "pi pi-smile",
+    route: "/(crm)/(agente)/solicitud-asistencia",
+    roles: ["Admin", "Agente"],
+  },
+  {
+    name: "Solicitud Asistencia Cliente",
+    icon: "pi pi-smile",
+    route: "/(crm)/(cliente)/solicitud-asistencia",
+    roles: ["Cliente", "Mayorista"],
+  },
+  {
+    name: "Solicitud Cambio Agente",
+    icon: "pi pi-exchange",
+    route: "/(admin)/cambioAgente/solicitudesCambioAgente",
+    roles: ["Admin"],
+  },
+  {
+    name: "Gestión de Configuraciones",
+    icon: "pi pi-cog",
+    route: "/(admin)/configuraciones/menuConfiguraciones",
+    roles: ["Admin"],
+  },
+  {
+    name: "Solicitudes mayoristas",
+    icon: "pi pi-exchange",
+    route: "/(agente)/(solicitudes-mayoristas)/lista-solicitudes",
+    roles: ["Agente"],
+  },
+  {
+    name: "Cupones",
+    icon: "pi pi-tags",
+    route: "/(admin)/cupones/cupones",
+    roles: ["Admin"],
+  },
+  {
+    name: "Mis solicitudes",
+    icon: "pi pi-tags",
+    route: "/(mayorista)/(solicitudes-mayoristas)/lista-solicitudes",
+    roles: ["Mayorista"],
+  },
+  {
+    name: "Mayoristas Asignados",
+    icon: "pi pi-users",
+    route: "/(agente)/mayoristas-asignados",
+    roles: ["Agente"],
+  },
+  {
+    name: "Notificaciones",
+    icon: "pi pi-bell",
+    route: "/notificaciones",
+    roles: ["Admin","Agente", "Mayorista", "Cliente", "Operador"],
+  },
+  {
+    name: "Mesa de Ayuda",
+    icon: "pi pi-comments",
+    route: "/mesa-ayuda-cliente",
+    roles: ["Mayorista", "Cliente"],
+  },
+  {
+    name: "Mesa de Ayuda",
+    icon: "pi pi-comments",
+    route: "/mesa-ayuda-agente",
+    roles: ["Agente"],
+  },
+  {
+    name: "Pagos",
+    icon: "pi pi-dollar",
+    route: "/pagos",
+    roles: ["Mayorista"],
+  },
 ];
 
 export default function Navbar() {
@@ -41,9 +145,11 @@ export default function Navbar() {
   const navigate = useNavigate();
   const menuRight = useRef<Menu>(null);
 
-  console.log(session)
+  console.log(session);
 
-  const filteredModules = modules.filter((module) => module.roles.includes(session?.rol || ""));
+  const filteredModules = modules.filter((module) =>
+    module.roles.includes(session?.rol || "")
+  );
 
   const items = filteredModules.map((module) => ({
     label: module.name,
@@ -73,7 +179,6 @@ export default function Navbar() {
       },
     },
   ];
-
   const start = (
     <img
       alt="logo"
@@ -106,7 +211,11 @@ export default function Navbar() {
         aria-controls="popup_menu_right"
         aria-haspopup
       />
-      <FaBars size={24} className="mr-2 cursor-pointer" onClick={() => navigate("/menu")} />
+      <FaBars
+        size={24}
+        className="mr-2 cursor-pointer"
+        onClick={() => navigate("/menu")}
+      />
     </div>
   );
 

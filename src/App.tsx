@@ -4,7 +4,6 @@ import { SessionGuard } from "./Guards/SessionGuard";
 import Inicio from "./pages/Inicio";
 import MainLayout from "./pages/layout/MainLayout";
 import SolicitudesMayoristas from "./pages/SolicitudesMayoristas";
-import 'bootstrap/dist/css/bootstrap.min.css';
 import SolicitudesCambioAgente from "./pages/admin/cambioAgente/solicitudesCambioAgente";
 import MenuConfiguraciones from "./pages/admin/configuraciones/menuConfiguraciones";
 import Cupones from "./pages/admin/cupones/cupones";
@@ -21,61 +20,123 @@ import MisSolicitudesCambioAgente from "./pages/(perfil)/misSolicitudesCambioAge
 import Agente from "./pages/(perfil)/agente";
 import DetalleSolicitudCambioAgente from "./pages/admin/cambioAgente/detalleSolicitudCambioAgente";
 
-export default function App() {
+import "bootstrap/dist/css/bootstrap.min.css";
+
+import Notificaciones from "./pages/Notificaciones";
+import SolicitudAsistenciaCliente from "./pages/mesa-ayuda/cliente/solicitud-asistencia";
+
+import { Toast } from "primereact/toast";
+import React, { useRef } from "react";
+import DetalleSolicitudAsistencia from "./pages/mesa-ayuda/cliente/detalle-solicitud";
+
+// Contexto para manejar los mensajes de Toast
+export const ToastContext = React.createContext();
+
+const App = () => {
+  const toast = useRef(null);
+
+  // Función para mostrar el mensaje de Toast
+  const showToast = ({
+    severity = "error",
+    summary = "Error",
+    detail = "No se pudo completar la acción.",
+  }) => {
+    toast.current.show({ severity, summary, detail, life: 3000 });
+  };
+
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Preloader />} />
+    <ToastContext.Provider value={{ showToast }}>
+      <Toast ref={toast} />
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Preloader />} />
 
-        <Route element={<SessionGuard />}>
-          <Route element={<MainLayout />}>
-            <Route path="/inicio" element={<Inicio />} />
+          <Route element={<SessionGuard />}>
+            <Route element={<MainLayout />}>
+              <Route path="/inicio" element={<Inicio />} />
 
-            <Route path="/(perfil)/profile" element={<Profile />} />
-            <Route path="/(perfil)/puntosFidelidad" element={<Puntosfidelidad />} />
-            <Route path="/(perfil)/misSolicitudesCambioAgente" element={<MisSolicitudesCambioAgente />} />
-            <Route path="/(perfil)/agente" element={<Agente />} />
+              <Route path="/(perfil)/profile" element={<Profile />} />
+              <Route
+                path="/(perfil)/puntosFidelidad"
+                element={<Puntosfidelidad />}
+              />
+              <Route
+                path="/(perfil)/misSolicitudesCambioAgente"
+                element={<MisSolicitudesCambioAgente />}
+              />
+              <Route path="/(perfil)/agente" element={<Agente />} />
 
-            <Route
-              path="/(admin)/cambioAgente/solicitudesCambioAgente"
-              element={<SolicitudesCambioAgente />}
-            />
-            <Route
-              path="/(admin)/cambioAgente/detalleSolicitudCambioAgente"
-              element={<DetalleSolicitudCambioAgente />}
-            />
+              <Route
+                path="/(admin)/cambioAgente/solicitudesCambioAgente"
+                element={<SolicitudesCambioAgente />}
+              />
+              <Route
+                path="/(admin)/cambioAgente/detalleSolicitudCambioAgente"
+                element={<DetalleSolicitudCambioAgente />}
+              />
 
-            <Route
-              path="/(admin)/configuraciones/menuConfiguraciones"
-              element={<MenuConfiguraciones />}
-            />
-            <Route path="/(admin)/configuraciones/configuracionesGenerales" element={<ConfiguracionesGenerales />} />
-            <Route path="/(admin)/configuraciones/formularioConfiguracionesGenerales" element={<FormularioConfiguracionesGenerales />} />
+              <Route
+                path="/(admin)/configuraciones/menuConfiguraciones"
+                element={<MenuConfiguraciones />}
+              />
+              <Route
+                path="/(admin)/configuraciones/configuracionesGenerales"
+                element={<ConfiguracionesGenerales />}
+              />
+              <Route
+                path="/(admin)/configuraciones/formularioConfiguracionesGenerales"
+                element={<FormularioConfiguracionesGenerales />}
+              />
 
-            <Route path="/(admin)/configuraciones/configuracionVentasMayoreo" element={<ConfiguracionVentasMayoreo />} />
-            <Route path="/(admin)/configuraciones/formularioConfiguracionVentasMayoreo" element={<FormularioConfiguracionVentasMayoreo />} />
+              <Route
+                path="/(admin)/configuraciones/configuracionVentasMayoreo"
+                element={<ConfiguracionVentasMayoreo />}
+              />
+              <Route
+                path="/(admin)/configuraciones/formularioConfiguracionVentasMayoreo"
+                element={<FormularioConfiguracionVentasMayoreo />}
+              />
 
-            <Route path="/(admin)/puntos/reglaPuntos" element={<ReglaPuntos />} />
-            <Route path="/(admin)/puntos/formularioReglasPuntos" element={<FormularioReglasPuntos />} />
+              <Route
+                path="/(admin)/puntos/reglaPuntos"
+                element={<ReglaPuntos />}
+              />
+              <Route
+                path="/(admin)/puntos/formularioReglasPuntos"
+                element={<FormularioReglasPuntos />}
+              />
 
-            <Route
-              path="/(admin)/cupones/cupones"
-              element={<Cupones />}
-            />
-            <Route
-              path="/(admin)/cupones/formularioCupones"
-              element={<FormularioCupones />}
-            />
+              <Route path="/(admin)/cupones/cupones" element={<Cupones />} />
+              <Route
+                path="/(admin)/cupones/formularioCupones"
+                element={<FormularioCupones />}
+              />
 
-            <Route
-              path="/solicitudes-mayoristas"
-              element={<SolicitudesMayoristas />}
-            />
+              <Route
+                path="/solicitudes-mayoristas"
+                element={<SolicitudesMayoristas />}
+              />
+              <Route path="/notificaciones" element={<Notificaciones />} />
+              <Route
+                path="/mesa-ayuda-cliente"
+                element={<SolicitudAsistenciaCliente />}
+              />
+              <Route
+                path="/solicitud-asistencia/:solicitudId"
+                element={<DetalleSolicitudAsistencia />}
+              />
+              <Route
+                path="/mesa-ayuda-agente"
+                element={<SolicitudAsistenciaCliente />}
+              />
+            </Route>
           </Route>
-        </Route>
 
-        <Route path="*" element={<Navigate to="/inicio" />} />
-      </Routes>
-    </BrowserRouter>
+          <Route path="*" element={<Navigate to="/inicio" />} />
+        </Routes>
+      </BrowserRouter>
+    </ToastContext.Provider>
   );
-}
+};
+
+export default App;
