@@ -20,8 +20,6 @@ import MisSolicitudesCambioAgente from "./pages/(perfil)/misSolicitudesCambioAge
 import Agente from "./pages/(perfil)/agente";
 import DetalleSolicitudCambioAgente from "./pages/admin/cambioAgente/detalleSolicitudCambioAgente";
 
-import "bootstrap/dist/css/bootstrap.min.css";
-
 import Notificaciones from "./pages/Notificaciones";
 import SolicitudAsistenciaCliente from "./pages/mesa-ayuda/cliente/solicitud-asistencia";
 
@@ -29,24 +27,17 @@ import { Toast } from "primereact/toast";
 import React, { useRef } from "react";
 import DetalleSolicitudAsistencia from "./pages/mesa-ayuda/cliente/detalle-solicitud";
 
-// Contexto para manejar los mensajes de Toast
-export const ToastContext = React.createContext();
+export const ToastContext = React.createContext<React.RefObject<Toast> | null>(
+  null
+);
 
 const App = () => {
-  const toast = useRef(null);
-
-  // Función para mostrar el mensaje de Toast
-  const showToast = ({
-    severity = "error",
-    summary = "Error",
-    detail = "No se pudo completar la acción.",
-  }) => {
-    toast.current.show({ severity, summary, detail, life: 3000 });
-  };
+  const toast = useRef<Toast>(null);
 
   return (
-    <ToastContext.Provider value={{ showToast }}>
+    <ToastContext.Provider value={toast}>
       <Toast ref={toast} />
+
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Preloader />} />
