@@ -18,8 +18,6 @@ const Profile = () => {
   const navigate = useNavigate(); // Usamos useNavigate para la navegación
 
   useEffect(() => {
-    console.log("SESSION")
-    console.log(session?.rol)
     if (session?.rol === "Mayorista") {
       getUserMayoristaDetails();
     } else {

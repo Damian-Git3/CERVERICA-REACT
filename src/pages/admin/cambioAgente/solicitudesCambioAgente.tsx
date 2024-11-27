@@ -20,7 +20,7 @@ const SolicitudesCambioAgente = () => {
     };
 
     fetchSolicitudes();
-  }, [getSolicitudes]);
+  }, []);
 
   const handleVerSolicitudes = (solicitud) => {
     if (solicitud) {
