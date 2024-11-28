@@ -1,13 +1,13 @@
 import { Menubar } from "primereact/menubar";
 import { Menu } from "primereact/menu";
 import { Avatar } from "primereact/avatar";
-import { FaBars } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useRef } from "react";
 import logoNavbar from "../../assets/img/logo-navbar.png";
 import useSessionStore from "../../stores/useSessionStore";
 import useAccount from "../../hooks/useAccount";
 import axios from "axios";
+import { MenuItem } from "primereact/menuitem";
 
 interface Module {
   name: string;
@@ -57,7 +57,7 @@ const modules: Module[] = [
     name: "Notificaciones",
     icon: "pi pi-bell",
     route: "/(crm)/(notificacion)",
-    roles: ["Admin", "Mayorista", "Agente", "Cliente"],
+    roles: ["Admin", "Mayorista", "Agente"],
   },
   {
     name: "Ventas",
@@ -91,8 +91,8 @@ const modules: Module[] = [
   },
   {
     name: "Solicitudes mayoristas",
-    icon: "pi pi-exchange",
-    route: "/(agente)/(solicitudes-mayoristas)/lista-solicitudes",
+    icon: "pi pi-address-book",
+    route: "/solicitudes-mayoristas",
     roles: ["Agente"],
   },
   {
@@ -112,12 +112,6 @@ const modules: Module[] = [
     icon: "pi pi-users",
     route: "/(agente)/mayoristas-asignados",
     roles: ["Agente"],
-  },
-  {
-    name: "Notificaciones",
-    icon: "pi pi-bell",
-    route: "/notificaciones",
-    roles: ["Admin","Agente", "Mayorista", "Cliente", "Operador"],
   },
   {
     name: "Mesa de Ayuda",
@@ -144,20 +138,19 @@ export default function Navbar() {
   const { cerrarSesion } = useAccount();
   const navigate = useNavigate();
   const menuRight = useRef<Menu>(null);
-
-  console.log(session);
+  const location = useLocation();
 
   const filteredModules = modules.filter((module) =>
     module.roles.includes(session?.rol || "")
   );
 
-  const items = filteredModules.map((module) => ({
+  const items: MenuItem[] = filteredModules.map((module) => ({
     label: module.name,
     icon: module.icon,
     command: () => {
-      console.log("Redirigiendo a:", module.route);
       navigate(module.route);
     },
+    className: location.pathname === module.route ? "active" : "",
   }));
 
   const userMenuItems = [
@@ -179,6 +172,7 @@ export default function Navbar() {
       },
     },
   ];
+
   const start = (
     <img
       alt="logo"
@@ -199,6 +193,7 @@ export default function Navbar() {
         popupAlignment="right"
         className="mt-2"
       />
+
       <Avatar
         label={session?.nombre.charAt(0)}
         style={{ backgroundColor: "#ed9224", color: "black" }}
@@ -211,11 +206,11 @@ export default function Navbar() {
         aria-controls="popup_menu_right"
         aria-haspopup
       />
-      <FaBars
-        size={24}
-        className="mr-2 cursor-pointer"
+
+      {/* <i
+        className="pi pi-bars mr-2 cursor-pointer"
         onClick={() => navigate("/menu")}
-      />
+      ></i> */}
     </div>
   );
 

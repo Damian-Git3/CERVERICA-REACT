@@ -145,6 +145,11 @@ export default function useSolicitudesMayoristas() {
   const obtenerCarritoSolicitud = async (idSolicitud: number) => {
     setCargando(true);
     try {
+      dispatch({
+        type: "GET_CARRITO_SOLICITUD",
+        payload: [],
+      });
+
       const result = await axios.get<ProductoCarrito[]>(
         `${END_POINT}/obtener-carrito-solicitud/${idSolicitud}`
       );
