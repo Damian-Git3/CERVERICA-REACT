@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
-import { Button, Spinner } from "react-bootstrap";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "primereact/button";
+import { ProgressSpinner } from "primereact/progressspinner";
 import { images } from "../../../constants";
-import './reglasPuntos.css';
 import usePuntosFidelidad from "../../../hooks/usePuntosFidelidad";
+import { Card } from "primereact/card";
+import { Divider } from 'primereact/divider';
 
 const ReglaPuntos = () => {
   const {
@@ -22,7 +24,6 @@ const ReglaPuntos = () => {
     fetchData();
   }, []);
 
-
   const handleButtonClick = () => {
     if (reglasPuntos) {
       navigate("/(admin)/puntos/formularioReglasPuntos", { state: { reglasPuntos } });
@@ -32,45 +33,28 @@ const ReglaPuntos = () => {
   };
 
   return (
-    <div className="container">
-      <h1 className="title">Reglas de Puntos de Fidelidad</h1>
+    <div className="p-m-4">
+      <h1 className="p-text-center">Reglas de Puntos de Fidelidad</h1>
       {cargando ? (
-        <Spinner animation="border" variant="primary" />
+        <ProgressSpinner style={{ width: '50px', height: '50px' }} />
       ) : reglasPuntos ? (
-        <div className="details">
-          <p className="text">
-            <strong>Valor MXN por Punto:</strong> {reglasPuntos.valorMXNPunto}
-          </p>
-          <p className="text">
-            <strong>Monto Mínimo:</strong> {reglasPuntos.montoMinimo}
-          </p>
-          <p className="text">
-            <strong>Porcentaje de Conversión:</strong> {reglasPuntos.porcentajeConversion}
-          </p>
-          <p className="text">
-            <strong>Fecha de Modificación:</strong>{" "}
-            {new Date(reglasPuntos.fechaModificacion).toLocaleDateString()}
-          </p>
-          <button className="button" onClick={handleButtonClick}>
-            Actualizar Reglas de Puntos
-          </button>
-        </div>
-      ) : (
-        <>
-          <div className="container-datos">
-            <img
-              src={images.noResult}
-              alt="No se encontraron datos"
-              className="image"
-            />
-            <p>No existen reglas de puntos</p>
-
-
-            <button className="button" onClick={handleButtonClick}>
-              Registrar Reglas de Puntos
-            </button>
+        <Card>
+          <div className="p-mb-3">
+            <h3>Reglas Actuales</h3>
+            <Divider />
+            <p><strong>Valor MXN por Punto:</strong> {reglasPuntos.valorMXNPunto}</p>
+            <p><strong>Monto Mínimo:</strong> {reglasPuntos.montoMinimo}</p>
+            <p><strong>Porcentaje de Conversión:</strong> {reglasPuntos.porcentajeConversion}</p>
+            <p><strong>Fecha de Modificación:</strong> {new Date(reglasPuntos.fechaModificacion).toLocaleDateString()}</p>
+            <Button icon="pi pi-pencil" label="Actualizar Reglas de Puntos" onClick={handleButtonClick} className="p-button-success" />
           </div>
-        </>
+        </Card>
+      ) : (
+        <div className="p-d-flex p-flex-column p-align-items-center">
+          <img src={images.noResult} className="p-mb-3" alt="No se encontraron datos" />
+          <p className="p-text-center">No existen reglas de puntos</p>
+          <Button label="Registrar Reglas de puntos" icon="pi pi-plus" onClick={handleButtonClick} className="p-button-success" />
+        </div>
       )}
     </div>
   );
