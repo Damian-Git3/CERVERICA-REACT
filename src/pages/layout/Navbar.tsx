@@ -70,6 +70,27 @@ export default function Navbar() {
       template: templateItem,
       rol: ["Admin", "Agente"],
     },
+    {
+      label: "Ventas",
+      icon: "pi pi-shopping-cart",
+      url: "/ventas",
+      template: templateItem,
+      rol: ["Admin", "Agente"],
+    },
+    {
+      label: "Reporte de ventas",
+      icon: "pi pi-chart-bar",
+      url: "/reporte-ventas",
+      template: templateItem,
+      rol: ["Admin", "Agente"],
+    },
+    {
+      label: "Dashboard",
+      icon: "pi pi-home",
+      url: "/dashboard",
+      template: templateItem,
+      rol: ["Admin"],
+    }
   ];
 
   const links = allLinks.filter((item) => {
