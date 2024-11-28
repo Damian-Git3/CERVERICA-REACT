@@ -5,13 +5,6 @@
   --color-gris: rgba(128, 128, 128, 1);
 }
 
-:root {
-  --primary-color: #ed9224 !important; /* Cambiar color primario */
-  --primary-color-text: #ffffff !important;
-  --text-color: #212121 !important; /* Texto principal */
-  --input-bg: #f5f5f5 !important; /* Fondo de entradas */
-}
-
 @font-face {
   font-family: "Futura";
   src: url("../assets/fonts/futura.ttf") format("truetype");
@@ -24,53 +17,10 @@
   font-family: "Futura", sans-serif;
 }
 
-.active {
+.active div a span {
   color: var(--color-principal);
 }
 
-.nav-link:hover {
-  color: var(--color-principal);
-}
-
-.p-button {
-  background: var(--primary-color);
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color-text);
-}
-
-.p-button:hover {
-  background: var(--color-secundario);
-  border: 1px solid var(--color-secundario);
-  color: var(--text-color);
-}
-.p-button:focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 149, 0, 0.25);
-}
-
-.p-button .p-togglebutton-input {
-  background: var(--color-secundario) !important;
-  border: 1px solid var(--primary-color);
-  color: var(--primary-color-text);
-}
-
-
-.p-inputtext {
-  background: var(--input-bg);
-  border: 1px solid var(--color-card);
-  color: var(--text-color);
-}
-
-.p-inputtext:focus {
-  background: var(--input-bg);
-  box-shadow: 0 0 0 0.2rem rgba(255, 149, 0, 0.25);
-  border: 1px solid var(--color-secundario);
-  color: var(--text-color);
-}
-
-.p-highlight .p-inputswitch-slider {
-  background: var(--primary-color);
-}
-
-.p-inputswitch-slider:focus {
-  box-shadow: 0 0 0 0.2rem rgba(255, 149, 0, 0.25);
+.p-highlight a .p-steps-number {
+  background-color: var(--color-principal);
 }

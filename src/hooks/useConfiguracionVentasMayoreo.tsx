@@ -1,6 +1,6 @@
 import { useReducer, useState } from "react";
 import axios from "axios";
-import { IConfiguracionVentasMayoreo } from "./../dtos/configuracionVentasMayoreo";
+import { IConfiguracionVentasMayoreo } from "../DTOs/configuracionVentasMayoreo";
 
 const initialState = {
   configuracionVentasMayoreo: null as IConfiguracionVentasMayoreo | null,
