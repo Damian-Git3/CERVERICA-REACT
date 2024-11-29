@@ -61,7 +61,7 @@ const ListVentas = () => {
   };
 
   const handlePressVenta = (id) => {
-    navigate(`/detalle-venta?id=${id}`);
+    navigate(`/(admin)/detalle-venta?id=${id}`);
   };
 
   return (

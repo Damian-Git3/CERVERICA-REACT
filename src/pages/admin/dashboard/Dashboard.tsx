@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { Bar, Line } from "react-chartjs-2";
 import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, LineElement, PointElement, Title, Tooltip, Legend } from 'chart.js';
 import { useNavigate } from "react-router-dom";
-import useGraficas from "../../hooks/useGraficas";
-import useVentas from "../../hooks/useVentas";
+import useGraficas from "../../../hooks/useGraficas";
+import useVentas from "../../../hooks/useVentas";
 import { Button } from "primereact/button";
 import { ProgressSpinner } from "primereact/progressspinner";
 

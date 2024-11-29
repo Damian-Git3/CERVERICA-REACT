@@ -4,10 +4,10 @@ import { SessionGuard } from "./Guards/SessionGuard";
 import Inicio from "./pages/Inicio";
 import MainLayout from "./pages/layout/MainLayout";
 import SolicitudesMayoristas from "./pages/SolicitudesMayoristas";
-import Ventas from "./pages/layout/Ventas";
-import ReporteVentasScreen from "./pages/layout/ReporteVentas";
-import Dashboard from "./pages/layout/Dashboard";
-import DetalleVentaScreen from "./pages/layout/DetalleVenta";
+import Ventas from "./pages/admin/ventas/Ventas";
+import ReporteVentasScreen from "./pages/admin/ventas/ReporteVentas";
+import Dashboard from "./pages/admin/dashboard/Dashboard";
+import DetalleVentaScreen from "./pages/admin/ventas/DetalleVenta";
 import SolicitudesCambioAgente from "./pages/admin/cambioAgente/solicitudesCambioAgente";
 import MenuConfiguraciones from "./pages/admin/configuraciones/menuConfiguraciones";
 import Cupones from "./pages/admin/cupones/cupones";
@@ -111,10 +111,10 @@ const App = () => {
                 path="/solicitudes-mayoristas"
                 element={<SolicitudesMayoristas />}
               />
-            <Route path="/ventas" element={<Ventas/>} />
-            <Route path="/reporte-ventas" element={<ReporteVentasScreen/>} />
-            <Route path="/detalle-venta" element={<DetalleVentaScreen/>} />
-            <Route path="/dashboard" element={<Dashboard/>}/>
+            <Route path="(admin)/ventas" element={<Ventas/>} />
+            <Route path="(admin)/reporte-ventas" element={<ReporteVentasScreen/>} />
+            <Route path="(admin)/detalle-venta" element={<DetalleVentaScreen/>} />
+            <Route path="(admin)/dashboard" element={<Dashboard/>}/>
               <Route path="/notificaciones" element={<Notificaciones />} />
               <Route
                 path="/mesa-ayuda-cliente"

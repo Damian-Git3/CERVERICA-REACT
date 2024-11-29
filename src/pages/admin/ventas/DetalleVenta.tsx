@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-import useVentas from "../../hooks/useVentas";
-import ModalVenta from "../../components/ModalVenta";
-import { DetalleVenta } from "../../models/venta";
+import useVentas from "../../../hooks/useVentas";
+import ModalVenta from "../../../components/ModalVenta";
+import { DetalleVenta } from "../../../models/venta";
 import { Button } from 'primereact/button';
 import { Badge } from 'primereact/badge';
 import { ProgressSpinner } from 'primereact/progressspinner';

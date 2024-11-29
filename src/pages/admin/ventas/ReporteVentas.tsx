@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import ListaReporteVentas from "../../components/ListaReporteVentas";
+import ListaReporteVentas from "../../../components/ListaReporteVentas";
 import { TabMenu } from 'primereact/tabmenu';
 
 const ReporteVentasScreen = () => {
