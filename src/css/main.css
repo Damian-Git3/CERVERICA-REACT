@@ -17,10 +17,10 @@
   font-family: "Futura", sans-serif;
 }
 
-.active {
+.active div a span {
   color: var(--color-principal);
 }
 
-.nav-link:hover {
-  color: var(--color-principal);
+.p-highlight a .p-steps-number {
+  background-color: var(--color-principal);
 }
