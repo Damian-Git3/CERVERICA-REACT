@@ -52,11 +52,11 @@ const useHistorialPrecios = () => {
         payload: response.data,
       });
 
-      toast?.current?.show({
-        severity: "success",
-        summary: "Recetas obtenidas! 🎉",
-        detail: "Se han obtenido las recetas correctamente",
-      });
+      //   toast?.current?.show({
+      //     severity: "success",
+      //     summary: "Recetas obtenidas! 🎉",
+      //     detail: "Se han obtenido las recetas correctamente",
+      //   });
 
       return response.data;
     } catch (error) {
@@ -83,11 +83,11 @@ const useHistorialPrecios = () => {
         payload: response.data,
       });
 
-      toast?.current?.show({
-        severity: "success",
-        summary: "Precios de receta obtenidos! 🎉",
-        detail: "Se han obtenido los precios de la receta correctamente",
-      });
+      //   toast?.current?.show({
+      //     severity: "success",
+      //     summary: "Precios de receta obtenidos! 🎉",
+      //     detail: "Se han obtenido los precios de la receta correctamente",
+      //   });
 
       return response.data;
     } catch (error) {
@@ -118,11 +118,11 @@ const useHistorialPrecios = () => {
         payload: response.data,
       });
 
-      toast?.current?.show({
-        severity: "success",
-        summary: "Historial de precios obtenido! 🎉",
-        detail: "Se ha obtenido el historial de precios correctamente",
-      });
+      //   toast?.current?.show({
+      //     severity: "success",
+      //     summary: "Historial de precios obtenido! 🎉",
+      //     detail: "Se ha obtenido el historial de precios correctamente",
+      //   });
       return response.data;
     } catch (error) {
       console.error("Error los precios de receta", error);

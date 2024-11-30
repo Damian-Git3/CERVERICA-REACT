@@ -8,16 +8,19 @@ import { Tag } from "primereact/tag";
 import React, { useEffect, useState } from "react";
 import useHistorialPrecios from "../../../hooks/useHistorialPrecios";
 import NuevoHistorialModal from "../NuevoHistorialModal";
+import { set } from "react-hook-form";
 
 interface ModalRecetaProps {
   modalVisible: boolean;
   idReceta: number | undefined;
+  setReload: (reload: boolean) => void;
   setModalVisible: (visible: boolean) => void;
 }
 
 const ModalReceta: React.FC<ModalRecetaProps> = ({
   modalVisible = false,
   idReceta,
+  setReload,
   setModalVisible,
 }) => {
   const { getReceta, receta, getHistorialPrecios, historialPrecios } =
@@ -27,11 +30,12 @@ const ModalReceta: React.FC<ModalRecetaProps> = ({
     useState(false);
 
   useEffect(() => {
+    console.log("modalRecetaVisible", modalVisible);
     if (modalVisible && idReceta) {
       getReceta(idReceta);
       getHistorialPrecios(idReceta);
     }
-  }, [idReceta, modalVisible]);
+  }, [idReceta]);
 
   useEffect(() => {
     const fetchHistorialPrecios = async () => {
@@ -41,6 +45,11 @@ const ModalReceta: React.FC<ModalRecetaProps> = ({
     };
     fetchHistorialPrecios();
   }, [modalNuevoHistorialVisible]);
+
+  const onHide = () => {
+    setModalVisible(false);
+    setReload(true);
+  };
 
   useEffect(() => {
     console.log("receta", receta);
@@ -58,7 +67,7 @@ const ModalReceta: React.FC<ModalRecetaProps> = ({
         label="Cerrar"
         icon="pi pi-times-circle"
         onClick={() => {
-          setModalVisible(false);
+          onHide();
         }}
         className="p-mt-2"
       />
@@ -71,7 +80,7 @@ const ModalReceta: React.FC<ModalRecetaProps> = ({
       visible={modalVisible}
       style={{ width: "50vw" }}
       onHide={() => {
-        setModalVisible(false);
+        onHide();
       }}
       footer={footerContent}
     >

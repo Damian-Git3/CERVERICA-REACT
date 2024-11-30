@@ -12,15 +12,17 @@ import "./styles.css";
 export function HistorialPrecios() {
   const [text, setText] = useState("");
   const [modalVisible, setModalVisible] = useState<boolean>(false);
+  const [reload, setReload] = useState<boolean>(false);
   const [idReceta, setIdReceta] = useState<number | undefined>();
   const [filteredRecetas, setFilteredRecetas] = useState<any[]>([]);
   const { listaRecetas, getListaRecetas } = useHistorialPrecios();
 
   useEffect(() => {
-    if (modalVisible === false) {
+    console.log("reload", reload);
+    if (reload === false) {
       getListaRecetas();
     }
-  }, [modalVisible]);
+  }, [reload]);
 
   useEffect(() => {
     setFilteredRecetas(listaRecetas);
@@ -95,6 +97,7 @@ export function HistorialPrecios() {
         <ModalReceta
           modalVisible={modalVisible}
           idReceta={idReceta}
+          setReload={setReload}
           setModalVisible={setModalVisible}
         />
       )}
