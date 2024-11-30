@@ -1,57 +1,63 @@
 import React, { useState, useContext, useEffect } from "react";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { Dropdown } from 'primereact/dropdown';
+import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
+import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate, useLocation } from "react-router-dom";
-import { ActualizarSolicitudCambioAgenteDTO } from "@/dtos/cambioAgente";
 import useCambioAgente from "../../../hooks/useCambioAgente";
 import useSessionStore from "../../../stores/useSessionStore";
 import useAccount from "../../../hooks/useAccount";
+import { Button } from "primereact/button";
 import { Select } from "antd";
-import "./detalleSolicitudCambioAgente.css"
+import { Card } from "primereact/card";
+
 
 const MotivoCambioModal = ({ modalVisible, setModalVisible, onSubmit }) => {
   const [motivo, setMotivo] = useState("");
 
-  const isSubmitDisabled = motivo.trim() === ""; // Verificar si el motivo está vacío
+  const isSubmitDisabled = motivo.trim() === "";
 
   return (
-    modalVisible && (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <h2 className="modal-title">Motivo de rechazo</h2>
-          <textarea
-            placeholder="Escriba el motivo de rechazo de la solicitud aquí"
-            className="input-modal"
-            value={motivo}
-            onChange={(e) => setMotivo(e.target.value)}
-            rows="4"
+    <Dialog
+      visible={modalVisible}
+      header="Motivo de rechazo"
+      style={{ width: "450px" }}
+      onHide={() => setModalVisible(false)}
+      footer={
+        <div className="flex justify-content-end gap-5">
+          <Button
+            label="Enviar"
+            className="p-button-primary"
+            disabled={isSubmitDisabled}
+            onClick={() => {
+              onSubmit(motivo);
+              setModalVisible(false);
+            }}
           />
-
-          {isSubmitDisabled && (
-            <p className="error-text">Este campo es obligatorio.</p>
-          )}
-
-          <div className="container-buttons-solicitud-agente">
-            <button
-              onClick={() => {
-                onSubmit(motivo);
-                setModalVisible(false);
-              }}
-              className={`submit-button ${isSubmitDisabled ? "disabled" : ""}`}
-              disabled={isSubmitDisabled}
-            >
-              Rechazar
-            </button>
-            <button
-              onClick={() => setModalVisible(false)}
-              className="close-button"
-            >
-              Cerrar
-            </button>
-          </div>
+          <Button
+            label="Cerrar"
+            className="p-button-text"
+            onClick={() => setModalVisible(false)}
+          />
         </div>
-      </div>
-    )
+      }
+    >
+      <InputTextarea
+        value={motivo}
+        onChange={(e) => {
+          const regex = /^[a-zA-ZÀ-ÿ0-9.,\s]*$/; // Permite letras con acentos, números, punto, coma y espacios
+          const inputValue = e.target.value;
+          if (regex.test(inputValue)) {
+            setMotivo(inputValue); // Actualiza el valor solo si cumple con el regex
+          }
+        }}
+        rows={4}
+        cols={40}
+        placeholder="Escriba el motivo de rechazo de la solicitud aquí"
+        className={`w-full ${isSubmitDisabled ? "p-invalid" : ""}`}
+      />
+      {isSubmitDisabled && <small className="p-error">Este campo es obligatorio.</small>}
+    </Dialog>
   );
 };
 
@@ -71,7 +77,6 @@ const DetalleSolicitudCambioAgente = () => {
   const [selectedAgente, setSelectedAgente] = useState(null);
   const [showPicker, setShowPicker] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-
   useEffect(() => {
     const fetchData = async () => {
       await getAgentes();
@@ -82,6 +87,7 @@ const DetalleSolicitudCambioAgente = () => {
 
   const handleAceptar = async () => {
     if (selectedAgente === solicitud.idAgenteVentaActual) {
+      console.log("asasf")
       toast.error("El agente nuevo no puede ser el mismo que el agente actual.");
       return; // Detener ejecución si son iguales
     }
@@ -192,12 +198,14 @@ const DetalleSolicitudCambioAgente = () => {
       <p>Fecha de la solicitud: {convertAndFormatDate(solicitud.fechaSolicitud)}</p>
       <p>Estatus: {solicitud.estatus}</p>
 
-      <button
+      <Button
         onClick={() => setShowPicker(!showPicker)}
-        className="button"
+        className="p-button-primary"
       >
         {showPicker ? "Ocultar Selección" : "Seleccionar Agente (Opcional)"}
-      </button>
+      </Button>
+
+      <ToastContainer />
 
       {showPicker && (
         <Select
@@ -213,16 +221,19 @@ const DetalleSolicitudCambioAgente = () => {
             </Select.Option>
           ))}
         </Select>
+
       )}
 
-      <div className="button-container" style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: "50px" }}>
-        <button onClick={handleAceptar} className="button" style={{ backgroundColor: "green" }}>
+      <div className="flex justify-content-center gap-5 mt-5">
+        <Button onClick={handleAceptar} className="p-button-primary w-2 p-text-center">
           Aceptar
-        </button>
-        <button onClick={handleMotivoRechazo} className="button" style={{ backgroundColor: "red" }}>
+        </Button>
+        <Button onClick={handleMotivoRechazo} className="p-button-warning w-2 p-text-center">
           Rechazar
-        </button>
+        </Button>
       </div>
+
+
 
       <MotivoCambioModal
         modalVisible={modalVisible}

@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { Toast } from "primereact/toast"; // Componente de notificaciones
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import { Card } from "primereact/card"; // Para las tarjetas
 import { Tag } from "primereact/tag"; // Etiquetas de estado
 import { useLocation } from "react-router-dom"; // Para la navegación
@@ -12,6 +14,8 @@ const MisSolicitudesCambioAgente = () => {
 
   const [timelineData, setTimelineData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  console.log(solicitudesClienteCambioAgente);
 
   const toast = useRef(null); // Referencia para las notificaciones
 
@@ -68,10 +72,11 @@ const MisSolicitudesCambioAgente = () => {
   }, []);
 
   const getStatusTag = (status) => {
+    console.log(status)
     switch (status) {
       case "Aceptado":
         return <Tag value="Aceptado" severity="success" />;
-      case "Rechazado":
+      case "Rechazada":
         return <Tag value="Rechazado" severity="danger" />;
       default:
         return <Tag value="Pendiente" severity="warning" />;
@@ -120,7 +125,7 @@ const MisSolicitudesCambioAgente = () => {
             </div>
           </>
         )}
-        {item.status === "Rechazado" && (
+        {item.status === "Rechazada" && (
           <>
             <div className="mb-3">
               <strong>Fecha de respuesta:</strong> {item.fechaRespuesta}

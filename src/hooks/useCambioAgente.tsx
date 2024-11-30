@@ -155,7 +155,7 @@ export default function useCambioAgente() {
   // Método para actualizar la solicitud de cambio de agente
   const actualizarSolicitudCambioAgente = async (
     id: number,
-    solicitudDto: ActualizarSolicitudCambioAgenteDTO
+    solicitudDto: any
   ) => {
     setCargando(true);
     try {

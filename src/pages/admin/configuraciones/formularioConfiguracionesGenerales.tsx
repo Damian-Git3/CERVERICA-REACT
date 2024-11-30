@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import "./FormularioConfiguracionesGenerales.css";
 import useConfiguracionesGenerales from "../../../hooks/useConfiguracionesGenerales";
 import { InputSwitch } from 'primereact/inputswitch';
 import { InputText } from 'primereact/inputtext'; // PrimeReact InputText
@@ -132,7 +131,7 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
     <div className="container">
       <h1>{configuracion ? "Actualizar" : "Registrar"} Configuraciones Generales</h1>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label className="p-col-12 p-md-2">Promociones Automáticas:</label>
         <div className="p-col-12 p-md-10">
           <InputSwitch
@@ -142,7 +141,7 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label className="p-col-12 p-md-2">Notificación Promociones WhatsApp:</label>
         <div className="p-col-12 p-md-10">
           <InputSwitch
@@ -152,7 +151,7 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label className="p-col-12 p-md-2">Notificación Promociones Email:</label>
         <div className="p-col-12 p-md-10">
           <InputSwitch
@@ -162,10 +161,11 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label className="p-col-12 p-md-2">Mínimo Compra Envío Gratis:</label>
         <div className="p-col-12 p-md-10">
           <InputText
+            style={{ width: '100%' }}
             className="w-100"
             value={formValues.minimoCompraEnvioGratis}
             onChange={(e) => handleChange("minimoCompraEnvioGratis", e.target.value)}
@@ -174,10 +174,11 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label className="p-col-12 p-md-2">Tiempo Recordatorio Carrito Abandonado (min):</label>
         <div className="p-col-12 p-md-10">
           <InputText
+            style={{ width: '100%' }}
             className="w-100"
             value={formValues.tiempoRecordatorioCarritoAbandonado}
             onChange={(e) => handleChange("tiempoRecordatorioCarritoAbandonado", e.target.value)}
@@ -185,10 +186,11 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label className="p-col-12 p-md-2">Tiempo Recordatorio Recomendación Última Compra (min):</label>
         <div className="p-col-12 p-md-10">
           <InputText
+            style={{ width: '100%' }}
             className="w-100"
             value={formValues.tiempoRecordatorioRecomendacionUltimaCompra}
             onChange={(e) => handleChange("tiempoRecordatorioRecomendacionUltimaCompra", e.target.value)}
@@ -196,10 +198,11 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label className="p-col-12 p-md-2">Frecuencia Reclasificación Clientes (días):</label>
         <div className="p-col-12 p-md-10">
           <InputText
+            style={{ width: '100%' }}
             className="w-100"
             value={formValues.frecuenciaReclasificacionClientes}
             onChange={(e) => handleChange("frecuenciaReclasificacionClientes", e.target.value)}
@@ -207,10 +210,11 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label className="p-col-12 p-md-2">Frecuencia Mínima Mensual Cliente Frecuente:</label>
         <div className="p-col-12 p-md-10">
           <InputText
+            style={{ width: '100%' }}
             className="w-100"
             value={formValues.frecuenciaMinimaMensualClienteFrecuente}
             onChange={(e) => handleChange("frecuenciaMinimaMensualClienteFrecuente", e.target.value)}
@@ -218,10 +222,11 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label className="p-col-12 p-md-2">Tiempo Sin Compras Cliente Inactivo (días):</label>
         <div className="p-col-12 p-md-10">
           <InputText
+            style={{ width: '100%' }}
             className="w-100"
             value={formValues.tiempoSinComprasClienteInactivo}
             onChange={(e) => handleChange("tiempoSinComprasClienteInactivo", e.target.value)}

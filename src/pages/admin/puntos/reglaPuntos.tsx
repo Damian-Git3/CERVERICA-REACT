@@ -50,10 +50,10 @@ const ReglaPuntos = () => {
           </div>
         </Card>
       ) : (
-        <div className="p-d-flex p-flex-column p-align-items-center">
-          <img src={images.noResult} className="p-mb-3" alt="No se encontraron datos" />
+        <div className="w-50" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center',}}>
+          <img src={images.noResult} className="p-mb-3 w-3" alt="No se encontraron datos" />
           <p className="p-text-center">No existen reglas de puntos</p>
-          <Button label="Registrar Reglas de puntos" icon="pi pi-plus" onClick={handleButtonClick} className="p-button-success" />
+          <Button label="Registrar Reglas de puntos" icon="pi pi-plus" onClick={handleButtonClick} className="p-button-warning" />
         </div>
       )}
     </div>
