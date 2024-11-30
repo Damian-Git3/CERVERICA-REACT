@@ -55,7 +55,7 @@ const Pagos = () => {
         pago.monto.toString().includes(searchText);
 
       const matchesEstatus =
-        estatus?.value === null || estatus === pago.estatus;
+        estatus?.value === null || estatus === pago.estatus || estatus === null;
 
       return matchesText && matchesEstatus;
     });
