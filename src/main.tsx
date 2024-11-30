@@ -5,7 +5,7 @@ import "./config/AxiosConfig.ts";
 
 // PrimeReact
 import { PrimeReactProvider } from "primereact/api";
-import "primereact/resources/themes/lara-light-blue/theme.css";
+import "primereact/resources/themes/saga-orange/theme.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";
 

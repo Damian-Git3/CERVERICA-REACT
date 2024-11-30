@@ -26,6 +26,11 @@ import SolicitudAsistenciaCliente from "./pages/mesa-ayuda/cliente/solicitud-asi
 import { Toast } from "primereact/toast";
 import React, { useRef } from "react";
 import DetalleSolicitudAsistencia from "./pages/mesa-ayuda/cliente/detalle-solicitud";
+import Pagos from "./pages/pagos/cliente/pagos";
+import PagosMayorista from "./pages/pagos/agente/pagos";
+import SolicitudAsistenciaAgente from "./pages/mesa-ayuda/agente/solicitud-asistencia";
+import DetalleSolicitudAsistenciaAgente from "./pages/mesa-ayuda/agente/detalle-solicitud";
+import MayoristasAsignados from "./pages/mesa-ayuda/agente/mayoristas-asignados";
 
 export const ToastContext = React.createContext<React.RefObject<Toast> | null>(
   null
@@ -118,7 +123,23 @@ const App = () => {
               />
               <Route
                 path="/mesa-ayuda-agente"
-                element={<SolicitudAsistenciaCliente />}
+                element={<SolicitudAsistenciaAgente />}
+              />
+              <Route
+                path="/agente/solicitud-asistencia/:solicitudId"
+                element={<DetalleSolicitudAsistenciaAgente />}
+              />
+              <Route
+                path="/mayorista/:id/pagos"
+                element={<PagosMayorista />}
+              />
+              <Route
+                path="/cliente/pagos"
+                element={<Pagos />}
+              />
+              <Route
+                path="/mayoristas-asignados"
+                element={<MayoristasAsignados />}
               />
             </Route>
           </Route>

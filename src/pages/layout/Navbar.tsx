@@ -42,12 +42,6 @@ const modules: Module[] = [
     roles: ["Mayorista"],
   },
   {
-    name: "Pagos",
-    icon: "pi pi-dollar",
-    route: "/(mayorista)/pagos",
-    roles: ["Mayorista"],
-  },
-  {
     name: "Dashboard",
     icon: "pi pi-chart-bar",
     route: "/(admin)/(dashboard)",
@@ -56,26 +50,14 @@ const modules: Module[] = [
   {
     name: "Notificaciones",
     icon: "pi pi-bell",
-    route: "/(crm)/(notificacion)",
-    roles: ["Admin", "Mayorista", "Agente"],
+    route: "/notificaciones",
+    roles: ["Admin", "Operador", "Cliente", "Mayorista", "Agente"],
   },
   {
     name: "Ventas",
     icon: "pi pi-shopping-cart",
     route: "/(admin)/ventas",
     roles: ["Admin"],
-  },
-  {
-    name: "Solicitud Asistencia Agente",
-    icon: "pi pi-smile",
-    route: "/(crm)/(agente)/solicitud-asistencia",
-    roles: ["Admin", "Agente"],
-  },
-  {
-    name: "Solicitud Asistencia Cliente",
-    icon: "pi pi-smile",
-    route: "/(crm)/(cliente)/solicitud-asistencia",
-    roles: ["Cliente", "Mayorista"],
   },
   {
     name: "Solicitud Cambio Agente",
@@ -110,7 +92,7 @@ const modules: Module[] = [
   {
     name: "Mayoristas Asignados",
     icon: "pi pi-users",
-    route: "/(agente)/mayoristas-asignados",
+    route: "/mayoristas-asignados",
     roles: ["Agente"],
   },
   {
@@ -128,7 +110,7 @@ const modules: Module[] = [
   {
     name: "Pagos",
     icon: "pi pi-dollar",
-    route: "/pagos",
+    route: "/cliente/pagos",
     roles: ["Mayorista"],
   },
 ];
@@ -155,8 +137,25 @@ export default function Navbar() {
 
   const userMenuItems = [
     {
+      label: "ERP",
+      icon: "pi pi-arrow-left",
+      roles: ["Admin", "Agente", "Operador"],
+      command: () => {
+        window.location.href = `http://localhost:4200/gestion/inicio`;
+      },
+    },
+    {
+      label: "ERP",
+      icon: "pi pi-arrow-left",
+      roles: ["Cliente", "Mayorista"],
+      command: () => {
+        window.location.href = `http://localhost:4200`;
+      },
+    },
+    {
       label: "Perfil",
       icon: "pi pi-user",
+      roles: ["Admin", "Operador", "Cliente", "Mayorista", "Agente"],
       command: () => {
         navigate("/(perfil)/profile");
       },
@@ -164,6 +163,7 @@ export default function Navbar() {
     {
       label: "Cerrar sesión",
       icon: "pi pi-sign-out",
+      roles: ["Admin", "Operador", "Cliente", "Mayorista", "Agente"],
       command: async () => {
         await cerrarSesion();
         cerrarSesionSessionStore();
@@ -172,6 +172,10 @@ export default function Navbar() {
       },
     },
   ];
+
+  const filteredUserMenuItems = userMenuItems.filter((items) =>
+    items.roles.includes(session?.rol || "")
+  );
 
   const start = (
     <img
@@ -186,7 +190,7 @@ export default function Navbar() {
   const end = (
     <div className="flex align-items-center gap-2">
       <Menu
-        model={userMenuItems}
+        model={filteredUserMenuItems}
         popup
         ref={menuRight}
         id="popup_menu_right"

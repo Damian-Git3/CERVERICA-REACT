@@ -5,11 +5,9 @@ import { InputText } from "primereact/inputtext";
 import { ToggleButton } from "primereact/togglebutton";
 import useSolicitudesAsistencias from "../../../hooks/useSolicitudesAsistencias";
 import NuevaSolicitudAsistenciaModal from "./nueva-solicitud-asistencia-modal";
-
-import { Toast } from "primereact/toast";
-
 import "../../../css/solicitud-asistencia-cliente.css";
 import { useNavigate } from "react-router";
+import "primereact/resources/themes/saga-orange/theme.css";
 
 const SolicitudAsistenciaCliente = () => {
   const { solicitudesAsistenciasCliente, getSolicitudesAsistenciasCliente } =
@@ -70,7 +68,7 @@ const SolicitudAsistenciaCliente = () => {
   );
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "20px" }} className=" bg-card-light">
       <NuevaSolicitudAsistenciaModal recargar={getSolicitudesAsistenciasCliente}/>
 
       <div style={{ margin: "20px 0" }}>

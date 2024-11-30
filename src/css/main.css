@@ -24,3 +24,8 @@
 .p-highlight a .p-steps-number {
   background-color: var(--color-principal);
 }
+
+.bg-card-light {
+  background-color: #eaeaea8b;
+  min-height: 100vh;
+}

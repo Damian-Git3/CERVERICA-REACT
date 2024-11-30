@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import useSolicitudesAsistencias from "../../../hooks/useSolicitudesAsistencias";
 import { ToastContext } from "../../../App";
@@ -7,27 +7,24 @@ import { Button } from "primereact/button";
 import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { ListBox } from "primereact/listbox";
+import Seguimiento from "./SeguimientoSolicitudModal";
 import "../../../css/detalle-solicitud.css";
-import ValorarSolicitudModal from "./ValorarSolicitudModal";
 import "primereact/resources/themes/saga-orange/theme.css";
 
-const DetalleSolicitudAsistencia = () => {
+const DetalleSolicitudAsistenciaAgente = () => {
   const {
-    cambiarAgente,
-    cancelarSolicitudAsistencia,
     solicitudAsistencia,
     getSolicitudAsistencia,
-    valorarSolicitudAsistencia,
+    cerrarSolicitudAsistencia,
+    crearSeguimientoAsistencia,
   } = useSolicitudesAsistencias();
 
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [modalValorarVisible, setModalValorarVisible] = useState(false);
+  const [modalEliminarVisible, setModalEliminarVisible] = useState(false);
   const navigate = useNavigate();
   const { solicitudId } = useParams();
-  const [modalChangeAgentVisible, setModalChangeAgentVisible] = useState(false);
+  const [modalSeguimientoVisible, setModalSeguimientoVisible] = useState(false);
 
   const [motivoEliminar, setMotivoEliminar] = useState("");
-  const [motivo, setMotivo] = useState("");
 
   const toast = useContext(ToastContext);
 
@@ -46,37 +43,62 @@ const DetalleSolicitudAsistencia = () => {
     toast?.current?.show({ severity, summary, detail, life: 3000 });
   };
 
-  const handleCambiarAgente = () => {
-    setModalChangeAgentVisible(true);
+  useEffect(() => {
+    getSolicitudAsistencia(Number(solicitudId));
+  }, [solicitudId]);
+
+  const handleEliminarSolicitud = () => setModalEliminarVisible(true);
+  const handleSeguimientoModal = () => setModalSeguimientoVisible(true);
+
+  const confirmEliminarSolicitud = async () => {
+    const res = await cerrarSolicitudAsistencia(
+      Number(solicitudId),
+      motivoEliminar
+    );
+    setModalEliminarVisible(false);
+    if (res?.status === 200) {
+      navigate("/mesa-ayuda-agente");
+      showToast({
+        severity: "success",
+        summary: "Éxito!",
+        detail: "Solicitud de asistencia cerrada.",
+      });
+    } else {
+      showToast({
+        severity: "error",
+        summary: "Error! ❌",
+        detail: "No se pudo eliminar la solicitud.",
+      });
+    }
   };
 
-  const handleValorar = async (data) => {
-    const { puntaje, mensaje } = data;
-
-    const formValido = puntaje > 0 && mensaje.trim().length > 0;
+  const handleSeguimiento = async (data) => {
+    const { descripcion, mensaje } = data;
+    const formValido =
+      descripcion.trim().length > 0 && mensaje.trim().length > 0;
     console.log("Data enviada:", data);
     // Lógica para enviar datos al servidor
     if (formValido) {
-      const res = await valorarSolicitudAsistencia({
+      const res = await crearSeguimientoAsistencia({
         IdSolicitudAsistencia: Number(solicitudId),
         Mensaje: mensaje,
-        Valoracion: puntaje,
+        Descripcion: descripcion,
       });
       //const res = { status: 200 }; // Simulación de respuesta
-      setModalVisible(false);
+      setModalSeguimientoVisible(false);
 
       if (res?.status == 200) {
         showToast({
           severity: "success",
           summary: "Éxito! 🎉",
-          detail: "Valoración añadida.",
+          detail: "Seguimiento añadido.",
         });
-        handleVolver();
+        getSolicitudAsistencia(Number(solicitudId));
       } else {
         showToast({
           severity: "error",
           summary: "Error! ❌",
-          detail: "No se pudo valorar.",
+          detail: "No se pudo generar el seguimiento.",
         });
       }
     } else {
@@ -88,48 +110,15 @@ const DetalleSolicitudAsistencia = () => {
     }
   };
 
-  const confirmCambiarAgente = async () => {
-    const id = solicitudId;
-    setModalChangeAgentVisible(false);
-    const res = await cambiarAgente({
-      IdSolicitudAsistencia: Number(id),
-      Mensaje: motivo,
-      Valoracion: 0,
-    });
-
-    if (res?.status === 200) {
-      showToast({
-        severity: "success",
-        summary: "Éxito!",
-        detail: "Cambio de agente exitoso.",
-      });
-      handleVolver();
-    } else {
-      showToast({ severity: "error", detail: "No se pudo valorar." });
-    }
-  };
-
-  useEffect(() => {
-    getSolicitudAsistencia(Number(solicitudId));
-  }, [solicitudId]);
-
-  const handleEliminarSolicitud = () => setModalVisible(true);
-
-  const confirmEliminarSolicitud = async () => {
-    await cancelarSolicitudAsistencia(Number(solicitudId), motivoEliminar);
-    setModalVisible(false);
-    navigate("/mesa-ayuda-cliente");
-    showToast({
-      severity: "success",
-      summary: "Éxito!",
-      detail: "Solicitud de asistencia eliminada.",
-    });
-  };
-
-  const handleVolver = () => navigate("/mesa-ayuda-cliente");
+  const handleVolver = () => navigate("/mesa-ayuda-agente");
 
   return (
     <Card className="p-mb-4 bg-card-light">
+      <Seguimiento
+        visible={modalSeguimientoVisible}
+        onHide={() => setModalSeguimientoVisible(false)}
+        onSubmit={handleSeguimiento}
+      />
       <Button
         icon="pi pi-arrow-left"
         label="Volver"
@@ -174,11 +163,7 @@ const DetalleSolicitudAsistencia = () => {
                     {solicitudAsistencia?.solicitud.mensajeValoracion}
                   </div>
                 ) : (
-                  <Button
-                    label="Evaluar atención"
-                    className="p-button-success p-mt-2"
-                    onClick={() => setModalValorarVisible(true)}
-                  />
+                  <p>No hay valoración</p>
                 )}
               </>
             ) : (
@@ -188,32 +173,17 @@ const DetalleSolicitudAsistencia = () => {
         </Card>
       </div>
 
-      <ValorarSolicitudModal
-        visible={modalValorarVisible}
-        onHide={() => setModalValorarVisible(false)}
-        onSubmit={handleValorar}
-      />
-
       <div className="section">
-        <h3 className="section-title">Datos del Agente</h3>
+        <h3 className="section-title">Datos del cliente</h3>
         <Card className="p-mt-2">
           <p>
-            <strong>Nombre del Agente:</strong>{" "}
+            <strong>Nombre del Cliente:</strong>{" "}
             {solicitudAsistencia?.solicitud.agenteVenta?.fullName}
           </p>
           <p>
-            <strong>Email del Agente:</strong>{" "}
+            <strong>Email del Cliente:</strong>{" "}
             {solicitudAsistencia?.solicitud.agenteVenta?.email}
           </p>
-          {solicitudAsistencia?.solicitud.estatus === 3 ? (
-            <></>
-          ) : (
-            <Button
-              label="Cambiar de Agente"
-              className="p-button-warning p-mt-2"
-              onClick={handleCambiarAgente}
-            />
-          )}
         </Card>
       </div>
 
@@ -245,18 +215,21 @@ const DetalleSolicitudAsistencia = () => {
                   .seguimientosSolicitudAsistencia || []
               }
               itemTemplate={(item) => (
-                <div key={item.id}>
-                  <p>
-                    <strong>Descripción:</strong> {item.descripcion}
-                  </p>
-                  <p>
-                    <strong>Fecha de Seguimiento:</strong>{" "}
-                    {new Date(item.fechaSeguimiento).toLocaleString()}
-                  </p>
-                  <p>
-                    <strong>Mensaje:</strong> {item.mensaje}
-                  </p>
-                </div>
+                <>
+                  <div key={item.id}>
+                    <p>
+                      <strong>Descripción:</strong> {item.descripcion}
+                    </p>
+                    <p>
+                      <strong>Fecha de Seguimiento:</strong>{" "}
+                      {new Date(item.fechaSeguimiento).toLocaleString()}
+                    </p>
+                    <p>
+                      <strong>Mensaje:</strong> {item.mensaje}
+                    </p>
+                  </div>
+                  <hr />
+                </>
               )}
             />
           ) : (
@@ -271,16 +244,26 @@ const DetalleSolicitudAsistencia = () => {
       {solicitudAsistencia?.solicitud.estatus === 3 ? (
         <></>
       ) : (
-        <Button
-          label="Eliminar Solicitud"
-          icon="pi pi-trash"
-          className="p-button-danger p-mt-4"
-          onClick={handleEliminarSolicitud}
-        />
+        <>
+          <Button
+            label="Registrar seguimiento"
+            icon="pi pi-check"
+            className="p-button-success p-mt-4"
+            onClick={handleSeguimientoModal}
+          />
+          <br />
+          <br />
+          <Button
+            label="Eliminar Solicitud"
+            icon="pi pi-trash"
+            className="p-button-danger p-mt-4"
+            onClick={handleEliminarSolicitud}
+          />
+        </>
       )}
 
       <Dialog
-        visible={isModalVisible}
+        visible={modalEliminarVisible}
         style={{ width: "50vw" }}
         header="Eliminar Solicitud"
         footer={
@@ -289,7 +272,7 @@ const DetalleSolicitudAsistencia = () => {
               label="Cancelar"
               icon="pi pi-times"
               className="p-button-text mr-4"
-              onClick={() => setModalVisible(false)}
+              onClick={() => setModalEliminarVisible(false)}
             />
             <Button
               label="Eliminar"
@@ -299,7 +282,7 @@ const DetalleSolicitudAsistencia = () => {
             />
           </div>
         }
-        onHide={() => setModalVisible(false)}
+        onHide={() => setModalEliminarVisible(false)}
       >
         <div>
           <p>
@@ -313,40 +296,8 @@ const DetalleSolicitudAsistencia = () => {
           />
         </div>
       </Dialog>
-
-      <Dialog
-        visible={modalChangeAgentVisible}
-        style={{ width: "50vw" }}
-        header="Cambiar Agente"
-        footer={
-          <div className="p-mt-3">
-            <Button
-              label="Cancelar"
-              icon="pi pi-times"
-              className="p-button-text mr-4"
-              onClick={() => setModalChangeAgentVisible(false)}
-            />
-            <Button
-              label="Cambiar"
-              icon="pi pi-check"
-              className="p-button-warning"
-              onClick={() => confirmCambiarAgente()}
-            />
-          </div>
-        }
-        onHide={() => setModalChangeAgentVisible(false)}
-      >
-        <div>
-          <h3>Motivo para cambiar de agente</h3>
-          <InputText
-            placeholder="Escribe el motivo aquí"
-            className="p-mt-2 w-full"
-            onChange={(e) => setMotivo(e.target.value)}
-          />
-        </div>
-      </Dialog>
     </Card>
   );
 };
 
-export default DetalleSolicitudAsistencia;
+export default DetalleSolicitudAsistenciaAgente;
