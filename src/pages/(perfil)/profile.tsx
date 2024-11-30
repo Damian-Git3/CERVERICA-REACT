@@ -54,9 +54,19 @@ const Profile = () => {
     { name: "Mi Agente", icon: <IoIosPricetag size={30} />, action: handleNavigateToAgente },
   ];
 
+  
+  const filteredModules =
+    session?.rol === "Mayorista"
+      ? modules.filter((module) => module.name === "Mi Agente")
+      : session?.rol !== "Admin"
+        ? modules.filter((module) => module.name !== "Mi Agente")
+        : [];
+        
+  /*
   const filteredModules = session?.rol === "Mayorista"
     ? modules.filter((module) => module.name === "Mi Agente")
     : modules.filter((module) => module.name !== "Mi Agente");
+    */
 
   return (
     <div className="profile-container">
