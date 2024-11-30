@@ -1,29 +1,35 @@
 import { useReducer, useState } from "react";
 import axios from "axios";
+import { ICupon } from "../DTOs/cupon";
 
-import { ICupon } from "./../dtos/cupon";
+interface State {
+  cupones: ICupon[] | null;
+  cupon: ICupon | null;
+}
 
-const initialState = {
-  cupones: null as ICupon[] | null,
-  cupon: null as ICupon | null,
+type Action =
+  | { type: "REGISTRAR_CUPON"; payload: ICupon }
+  | { type: "ACTUALIZAR_CUPON"; payload: ICupon }
+  | { type: "FETCH_CUPON"; payload: ICupon }
+  | { type: "FETCH_CUPONES"; payload: ICupon[] };
+
+const initialState: State = {
+  cupones: null,
+  cupon: null,
 };
 
-const CuponesReducer = (state: any, action: any) => {
+const CuponesReducer = (state: State, action: Action): State => {
   const { payload, type } = action;
 
   switch (type) {
     case "REGISTRAR_CUPON":
       return { ...state, cupon: payload };
-
     case "ACTUALIZAR_CUPON":
       return { ...state, cupon: payload };
-
     case "FETCH_CUPON":
       return { ...state, cupon: payload };
-
     case "FETCH_CUPONES":
       return { ...state, cupones: payload };
-
     default:
       return state;
   }
@@ -87,7 +93,7 @@ export default function useCupones() {
 
   const getCupones = async () => {
     try {
-      const response = await axios.get<ICupon>(
+      const response = await axios.get<ICupon[]>(
         `/Cupon/obtener-todos-los-cupones`
       );
 

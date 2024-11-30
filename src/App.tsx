@@ -4,6 +4,10 @@ import { SessionGuard } from "./Guards/SessionGuard";
 import Inicio from "./pages/Inicio";
 import MainLayout from "./pages/layout/MainLayout";
 import SolicitudesMayoristas from "./pages/SolicitudesMayoristas";
+import Ventas from "./pages/admin/ventas/Ventas";
+import ReporteVentasScreen from "./pages/admin/ventas/ReporteVentas";
+import Dashboard from "./pages/admin/dashboard/Dashboard";
+import DetalleVentaScreen from "./pages/admin/ventas/DetalleVenta";
 import SolicitudesCambioAgente from "./pages/admin/cambioAgente/solicitudesCambioAgente";
 import MenuConfiguraciones from "./pages/admin/configuraciones/menuConfiguraciones";
 import Cupones from "./pages/admin/cupones/cupones";
@@ -26,11 +30,13 @@ import SolicitudAsistenciaCliente from "./pages/mesa-ayuda/cliente/solicitud-asi
 import { Toast } from "primereact/toast";
 import React, { useRef } from "react";
 import DetalleSolicitudAsistencia from "./pages/mesa-ayuda/cliente/detalle-solicitud";
+
 import Pagos from "./pages/pagos/cliente/pagos";
 import PagosMayorista from "./pages/pagos/agente/pagos";
 import SolicitudAsistenciaAgente from "./pages/mesa-ayuda/agente/solicitud-asistencia";
 import DetalleSolicitudAsistenciaAgente from "./pages/mesa-ayuda/agente/detalle-solicitud";
 import MayoristasAsignados from "./pages/mesa-ayuda/agente/mayoristas-asignados";
+import { HistorialPrecios } from "./components/HistorialPrecios/HistorialPrecios";
 
 export const ToastContext = React.createContext<React.RefObject<Toast> | null>(
   null
@@ -112,6 +118,10 @@ const App = () => {
                 path="/solicitudes-mayoristas"
                 element={<SolicitudesMayoristas />}
               />
+            <Route path="(admin)/ventas" element={<Ventas/>} />
+            <Route path="(admin)/reporte-ventas" element={<ReporteVentasScreen/>} />
+            <Route path="(admin)/detalle-venta" element={<DetalleVentaScreen/>} />
+            <Route path="(admin)/dashboard" element={<Dashboard/>}/>
               <Route path="/notificaciones" element={<Notificaciones />} />
               <Route
                 path="/mesa-ayuda-cliente"
@@ -141,6 +151,7 @@ const App = () => {
                 path="/mayoristas-asignados"
                 element={<MayoristasAsignados />}
               />
+              <Route path="/historial-precios" element={<HistorialPrecios />} />
             </Route>
           </Route>
 

@@ -1,0 +1,9 @@
+/* The component style is inserted here. */
+td {
+    text-align: center;
+}
+
+th > div {
+    display: flex;
+    justify-content: center;
+}

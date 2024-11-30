@@ -1,10 +1,10 @@
-import React, { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import useCupones from "../../../hooks/useCupones";
 import { images } from "../../../constants";
 import "./Cupones.css";
 
-const Cupones: React.FC = () => {
+const Cupones = () => {
   const { cargando, cupones, getCupones } = useCupones();
   const navigate = useNavigate();
 
@@ -12,7 +12,7 @@ const Cupones: React.FC = () => {
     const fetchCupones = async () => {
       await getCupones();
     };
-    
+
     fetchCupones();
   }, []);
 
@@ -24,16 +24,10 @@ const Cupones: React.FC = () => {
     const discountText =
       item.tipo === 1 ? `${item.valor}%` : `$${item.valor.toFixed(2)}`;
 
-    const categoriaComprador = {
-      1: "Todos",
-      2: "Frecuente",
-      3: "Minorista",
-      4: "Mayorista",
-      5: "Inactivo",
-    };
-
     const handleCardPress = () => {
-      navigate("/(admin)/cupones/formularioCupones", { state: { cupon: item } });
+      navigate("/(admin)/cupones/formularioCupones", {
+        state: { cupon: item },
+      });
     };
 
     return (
@@ -47,10 +41,13 @@ const Cupones: React.FC = () => {
           <p className="couponText">Paquete: {item.paquete}</p>
           <p className="couponText">Usos: {item.usos}</p>
           <p className="couponText">
-            Categoría comprador: {categoriaComprador[item.categoriaComprador] || "Desconocido"}
-          </p>
-          <p className="couponText">
-            Expira el: {isNaN(new Date(item.fechaExpiracion)) ? "Fecha inválida" : new Date(item.fechaExpiracion).toLocaleDateString()}
+            Expira el:{" "}
+            <p className="couponText">
+              Expira el:{" "}
+              {isNaN(new Date(item.fechaExpiracion).getTime())
+                ? "Fecha inválida"
+                : new Date(item.fechaExpiracion).toLocaleDateString()}
+            </p>
           </p>
           <p className="couponText">
             Estatus: {item.activo ? "Activo" : "Inactivo"}
@@ -62,7 +59,9 @@ const Cupones: React.FC = () => {
 
   return (
     <div className="container">
-      <button className="addButton" onClick={handleAddCoupon}>Agregar Cupon</button>
+      <button className="addButton" onClick={handleAddCoupon}>
+        Agregar Cupon
+      </button>
       <h1 className="title">Cupones Disponibles</h1>
 
       {cargando ? (
@@ -73,7 +72,11 @@ const Cupones: React.FC = () => {
         </div>
       ) : (
         <div className="noCouponsContainer">
-          <img src={images.noResult} alt="No se encontraron cupones" className="noResultImage" />
+          <img
+            src={images.noResult}
+            alt="No se encontraron cupones"
+            className="noResultImage"
+          />
           <p>No hay cupones disponibles.</p>
         </div>
       )}

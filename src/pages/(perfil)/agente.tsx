@@ -1,50 +1,57 @@
-import { useState, useContext, useEffect } from "react";
-import { Button } from "react-bootstrap";
-import { ToastContainer, toast } from "react-toastify"; // Usamos react-toastify para los mensajes
-import "react-toastify/dist/ReactToastify.css"; // Importamos los estilos de react-toastify
+import { useState, useRef, useContext, useEffect } from "react";
+import { Button } from "primereact/button";
+import { Dialog } from "primereact/dialog";
+import { InputTextarea } from "primereact/inputtextarea";
+import { Toast } from "primereact/toast";
 import { useLocation, useNavigate } from "react-router-dom";
 import useCambioAgente from "./../../hooks/useCambioAgente";
 import { SolicitudCambioAgenteDTO } from "../../dtos/cambioAgente";
 
 const MotivoCambioModal = ({ modalVisible, setModalVisible, onSubmit }) => {
   const [motivo, setMotivo] = useState("");
-
   const isSubmitDisabled = motivo.trim() === ""; // Verificar si el motivo está vacío
 
   return (
-    modalVisible && (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <h2>Motivo de cambio</h2>
-          <textarea
-            placeholder="Escriba el motivo aquí"
-            className="input-modal"
-            value={motivo}
-            onChange={(e) => setMotivo(e.target.value)}
-            rows={4}
+    <Dialog
+      visible={modalVisible}
+      header="Motivo de cambio"
+      style={{ width: "450px" }}
+      onHide={() => setModalVisible(false)}
+      footer={
+        <div className="flex justify-content-end gap-5">
+          <Button
+            label="Enviar"
+            className="p-button-primary"
+            disabled={isSubmitDisabled}
+            onClick={() => {
+              onSubmit(motivo);
+              setModalVisible(false);
+            }}
           />
-          {isSubmitDisabled && <p className="error-text">Este campo es obligatorio.</p>}
-          <div className="container-buttons-solicitud-agente">
-            <button
-              onClick={() => {
-                onSubmit(motivo);
-                setModalVisible(false);
-              }}
-              className={`submit-button ${isSubmitDisabled ? "disabled" : ""}`}
-              disabled={isSubmitDisabled}
-            >
-              Enviar
-            </button>
-            <button
-              onClick={() => setModalVisible(false)}
-              className="close-button"
-            >
-              Cerrar
-            </button>
-          </div>
+          <Button
+            label="Cerrar"
+            className="p-button-text"
+            onClick={() => setModalVisible(false)}
+          />
         </div>
-      </div>
-    )
+      }
+    >
+      <InputTextarea
+        value={motivo}
+        onChange={(e) => {
+          const regex = /^[a-zA-ZÀ-ÿ0-9.,\s]*$/; // Permite letras con acentos, números, punto, coma y espacios
+          const inputValue = e.target.value;
+          if (regex.test(inputValue)) {
+            setMotivo(inputValue); // Actualiza el valor solo si cumple con el regex
+          }
+        }}
+        rows={4}
+        cols={40}
+        placeholder="Escriba el motivo aquí"
+        className={`w-full ${isSubmitDisabled ? "p-invalid" : ""}`}
+      />
+      {isSubmitDisabled && <small className="p-error">Este campo es obligatorio.</small>}
+    </Dialog>
   );
 };
 
@@ -58,13 +65,18 @@ const Agente: React.FC = () => {
   } = useCambioAgente();
 
   const navigate = useNavigate();
-  const location = useLocation(); // Asegúrate de que useLocation esté importado
+  const location = useLocation();
+  const toast = useRef<Toast>(null);
   const userMayoristaDetails = location.state?.userMayoristaDetails || null;
 
   const [modalVisible, setModalVisible] = useState(false);
 
   if (!userMayoristaDetails || !userMayoristaDetails.agenteVenta) {
-    toast.error("Detalles del agente no disponibles.");
+    toast.current?.show({
+      severity: "error",
+      summary: "Error",
+      detail: "Detalles del agente no disponibles.",
+    });
     return null;
   }
 
@@ -75,37 +87,30 @@ const Agente: React.FC = () => {
   };
 
   const handleMotivoSubmit = async (motivo) => {
-    const fechaSolicitud = new Date();
-
-    // Obtener componentes de la fecha
-    const year = fechaSolicitud.getFullYear();
-    const month = String(fechaSolicitud.getMonth() + 1).padStart(2, "0"); // Mes comienza en 0
-    const day = String(fechaSolicitud.getDate()).padStart(2, "0");
-    const hours = String(fechaSolicitud.getHours()).padStart(2, "0");
-    const minutes = String(fechaSolicitud.getMinutes()).padStart(2, "0");
-    const seconds = String(fechaSolicitud.getSeconds()).padStart(2, "0");
-    const milliseconds = String(fechaSolicitud.getMilliseconds()).padStart(
-      3,
-      "0"
-    );
-
-    // Formatear como cadena ISO
-    const fechaFormatoAPI = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+    const fechaSolicitud = new Date().toISOString(); // Formato ISO simplificado
 
     const solicitudData: SolicitudCambioAgenteDTO = {
       idAgenteVentaActual: agenteVenta.id,
       motivo: motivo,
       solicitante: 1,
       idMayorista: userMayoristaDetails.idMayorista,
-      fechaSolicitud: fechaFormatoAPI,
+      fechaSolicitud,
     };
 
     const response = await solicitarCambioAgente(solicitudData);
     if (response) {
-      toast.success(`Solicitud enviada: Motivo - ${motivo}`);
+      toast.current?.show({
+        severity: "success",
+        summary: "Éxito",
+        detail: `Solicitud enviada: Motivo - ${motivo}`,
+      });
       await getSolicitudesCliente(userMayoristaDetails.idMayorista);
     } else {
-      toast.error("No se pudo enviar la solicitud.");
+      toast.current?.show({
+        severity: "error",
+        summary: "Error",
+        detail: "No se pudo enviar la solicitud.",
+      });
     }
   };
 
@@ -115,7 +120,11 @@ const Agente: React.FC = () => {
         try {
           await getSolicitudesCliente(userMayoristaDetails.idMayorista);
         } catch (error) {
-          toast.error("No se pudieron cargar las solicitudes.");
+          toast.current?.show({
+            severity: "error",
+            summary: "Error",
+            detail: "No se pudieron cargar las solicitudes.",
+          });
         }
       }
     };
@@ -129,12 +138,18 @@ const Agente: React.FC = () => {
         state: { userMayoristaDetails },
       });
     } else {
-      toast.error("Detalles de usuario mayorista no disponibles.");
+      toast.current?.show({
+        severity: "error",
+        summary: "Error",
+        detail: "Detalles de usuario mayorista no disponibles.",
+      });
     }
   };
 
   return (
     <div className="container-agente" style={{ textAlign: "center" }}>
+      <Toast ref={toast} />
+
       <div className="profile-header">
         <p className="profile-title">Mi Agente de Ventas</p>
       </div>
@@ -151,16 +166,22 @@ const Agente: React.FC = () => {
       <div className="button-container">
         {(solicitudesClienteCambioAgente.length === 0 ||
           solicitudesClienteCambioAgente[solicitudesClienteCambioAgente.length - 1].estatus !== "Pendiente") && (
-            <Button onClick={handleSolicitarCambio} className="button" style={{ width: "300px" }}>
-              Solicitar cambio de agente
-            </Button>
+            <Button
+              label="Solicitar cambio de agente"
+              className="p-button-primary"
+              style={{ width: "300px" }}
+              onClick={handleSolicitarCambio}
+            />
           )}
       </div>
 
       <div className="button-container" style={{ marginTop: "10px" }}>
-        <Button onClick={handleVerSolicitudes} className="button" style={{ width: "300px" }}>
-          Mis Solicitudes
-        </Button>
+        <Button
+          label="Mis Solicitudes"
+          className="p-button-secondary"
+          style={{ width: "300px" }}
+          onClick={handleVerSolicitudes}
+        />
       </div>
 
       <MotivoCambioModal
@@ -168,8 +189,6 @@ const Agente: React.FC = () => {
         setModalVisible={setModalVisible}
         onSubmit={handleMotivoSubmit}
       />
-
-      <ToastContainer />
     </div>
   );
 };

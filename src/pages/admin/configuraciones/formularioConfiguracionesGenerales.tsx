@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Switch } from "antd";  // Importa el Switch de Ant Design
 import "./FormularioConfiguracionesGenerales.css";
 import useConfiguracionesGenerales from "../../../hooks/useConfiguracionesGenerales";
+import { InputSwitch } from 'primereact/inputswitch';
+import { InputText } from 'primereact/inputtext'; // PrimeReact InputText
+import { Button } from 'primereact/button'; // PrimeReact Button
 
 interface IConfiguracionesGenerales {
   id: number;
@@ -46,9 +48,9 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
 
   const handleChange = (name: string, value: string) => {
     // Validar que los valores numéricos sean correctos
-    if (name === "minimoCompraEnvioGratis" || name === "tiempoRecordatorioCarritoAbandonado" || 
-        name === "tiempoRecordatorioRecomendacionUltimaCompra" || name === "frecuenciaReclasificacionClientes" ||
-        name === "frecuenciaMinimaMensualClienteFrecuente" || name === "tiempoSinComprasClienteInactivo") {
+    if (name === "minimoCompraEnvioGratis" || name === "tiempoRecordatorioCarritoAbandonado" ||
+      name === "tiempoRecordatorioRecomendacionUltimaCompra" || name === "frecuenciaReclasificacionClientes" ||
+      name === "frecuenciaMinimaMensualClienteFrecuente" || name === "tiempoSinComprasClienteInactivo") {
       const numericValue = value.replace(/[^0-9.]/g, ""); // Eliminar cualquier cosa que no sea número o punto decimal
       setFormValues((prevValues) => ({
         ...prevValues,
@@ -70,7 +72,18 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const fechaModificacion = new Date().toISOString();
+    const fechaSolicitud = new Date();
+    const year = fechaSolicitud.getFullYear();
+    const month = String(fechaSolicitud.getMonth() + 1).padStart(2, "0");
+    const day = String(fechaSolicitud.getDate()).padStart(2, "0");
+    const hours = String(fechaSolicitud.getHours()).padStart(2, "0");
+    const minutes = String(fechaSolicitud.getMinutes()).padStart(2, "0");
+    const seconds = String(fechaSolicitud.getSeconds()).padStart(2, "0");
+    const milliseconds = String(fechaSolicitud.getMilliseconds()).padStart(3, "0");
+
+    const fechaModificacion = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+
+
     const dataToSend = { ...formValues, fechaModificacion };
 
     // Validación antes de enviar el formulario
@@ -103,97 +116,122 @@ const FormularioConfiguracionesGenerales: React.FC = () => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (
+      !/[\d.]/.test(e.key) &&
+      e.key !== "Backspace" &&
+      e.key !== "Tab" &&
+      e.key !== "ArrowLeft" &&
+      e.key !== "ArrowRight"
+    ) {
+      e.preventDefault();
+    }
+  };
+
   return (
     <div className="container">
-      <h1 className="title">{configuracion ? "Actualizar" : "Registrar"} Configuraciones Generales</h1>
+      <h1>{configuracion ? "Actualizar" : "Registrar"} Configuraciones Generales</h1>
 
-      <div className="form-group">
-        <label>Promociones Automáticas:</label>
-        <Switch
-          checked={formValues.promocionesAutomaticas}
-          onChange={(checked) => handleSwitchChange("promocionesAutomaticas", checked)}
-        />
+      <div className="p-field p-grid w-50">
+        <label className="p-col-12 p-md-2">Promociones Automáticas:</label>
+        <div className="p-col-12 p-md-10">
+          <InputSwitch
+            checked={formValues.promocionesAutomaticas}
+            onChange={(e) => handleChange('promocionesAutomaticas', e.value)}
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Notificación Promociones WhatsApp:</label>
-        <Switch
-          checked={formValues.notificacionPromocionesWhatsApp}
-          onChange={(checked) => handleSwitchChange("notificacionPromocionesWhatsApp", checked)}
-        />
+      <div className="p-field p-grid w-50">
+        <label className="p-col-12 p-md-2">Notificación Promociones WhatsApp:</label>
+        <div className="p-col-12 p-md-10">
+          <InputSwitch
+            checked={formValues.notificacionPromocionesWhatsApp}
+            onChange={(e) => handleChange('notificacionPromocionesWhatsApp', e.value)}
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Notificación Promociones Email:</label>
-        <Switch
-          checked={formValues.notificacionPromocionesEmail}
-          onChange={(checked) => handleSwitchChange("notificacionPromocionesEmail", checked)}
-        />
+      <div className="p-field p-grid w-50">
+        <label className="p-col-12 p-md-2">Notificación Promociones Email:</label>
+        <div className="p-col-12 p-md-10">
+          <InputSwitch
+            checked={formValues.notificacionPromocionesEmail}
+            onChange={(e) => handleChange('notificacionPromocionesEmail', e.value)}
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Mínimo Compra Envío Gratis:</label>
-        <input
-          type="text"
-          className="input"
-          value={formValues.minimoCompraEnvioGratis}
-          onChange={(e) => handleChange("minimoCompraEnvioGratis", e.target.value)}
-        />
+      <div className="p-field p-grid w-50">
+        <label className="p-col-12 p-md-2">Mínimo Compra Envío Gratis:</label>
+        <div className="p-col-12 p-md-10">
+          <InputText
+            className="w-100"
+            value={formValues.minimoCompraEnvioGratis}
+            onChange={(e) => handleChange("minimoCompraEnvioGratis", e.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Tiempo Recordatorio Carrito Abandonado (min):</label>
-        <input
-          type="text"
-          className="input"
-          value={formValues.tiempoRecordatorioCarritoAbandonado}
-          onChange={(e) => handleChange("tiempoRecordatorioCarritoAbandonado", e.target.value)}
-        />
+      <div className="p-field p-grid w-50">
+        <label className="p-col-12 p-md-2">Tiempo Recordatorio Carrito Abandonado (min):</label>
+        <div className="p-col-12 p-md-10">
+          <InputText
+            className="w-100"
+            value={formValues.tiempoRecordatorioCarritoAbandonado}
+            onChange={(e) => handleChange("tiempoRecordatorioCarritoAbandonado", e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Tiempo Recordatorio Recomendación Última Compra (min):</label>
-        <input
-          type="text"
-          className="input"
-          value={formValues.tiempoRecordatorioRecomendacionUltimaCompra}
-          onChange={(e) => handleChange("tiempoRecordatorioRecomendacionUltimaCompra", e.target.value)}
-        />
+      <div className="p-field p-grid w-50">
+        <label className="p-col-12 p-md-2">Tiempo Recordatorio Recomendación Última Compra (min):</label>
+        <div className="p-col-12 p-md-10">
+          <InputText
+            className="w-100"
+            value={formValues.tiempoRecordatorioRecomendacionUltimaCompra}
+            onChange={(e) => handleChange("tiempoRecordatorioRecomendacionUltimaCompra", e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Frecuencia Reclasificación Clientes (días):</label>
-        <input
-          type="text"
-          className="input"
-          value={formValues.frecuenciaReclasificacionClientes}
-          onChange={(e) => handleChange("frecuenciaReclasificacionClientes", e.target.value)}
-        />
+      <div className="p-field p-grid w-50">
+        <label className="p-col-12 p-md-2">Frecuencia Reclasificación Clientes (días):</label>
+        <div className="p-col-12 p-md-10">
+          <InputText
+            className="w-100"
+            value={formValues.frecuenciaReclasificacionClientes}
+            onChange={(e) => handleChange("frecuenciaReclasificacionClientes", e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Frecuencia Mínima Mensual Cliente Frecuente:</label>
-        <input
-          type="text"
-          className="input"
-          value={formValues.frecuenciaMinimaMensualClienteFrecuente}
-          onChange={(e) => handleChange("frecuenciaMinimaMensualClienteFrecuente", e.target.value)}
-        />
+      <div className="p-field p-grid w-50">
+        <label className="p-col-12 p-md-2">Frecuencia Mínima Mensual Cliente Frecuente:</label>
+        <div className="p-col-12 p-md-10">
+          <InputText
+            className="w-100"
+            value={formValues.frecuenciaMinimaMensualClienteFrecuente}
+            onChange={(e) => handleChange("frecuenciaMinimaMensualClienteFrecuente", e.target.value)}
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label>Tiempo Sin Compras Cliente Inactivo (días):</label>
-        <input
-          type="text"
-          className="input"
-          value={formValues.tiempoSinComprasClienteInactivo}
-          onChange={(e) => handleChange("tiempoSinComprasClienteInactivo", e.target.value)}
-        />
+      <div className="p-field p-grid w-50">
+        <label className="p-col-12 p-md-2">Tiempo Sin Compras Cliente Inactivo (días):</label>
+        <div className="p-col-12 p-md-10">
+          <InputText
+            className="w-100"
+            value={formValues.tiempoSinComprasClienteInactivo}
+            onChange={(e) => handleChange("tiempoSinComprasClienteInactivo", e.target.value)}
+          />
+        </div>
       </div>
 
-      <button className="button" onClick={handleSubmit}>
-        {configuracion ? "Actualizar" : "Registrar"} Configuración
-      </button>
+      <br />
+
+      <Button label={configuracion ? "Actualizar" : "Registrar"} onClick={handleSubmit} className="p-button-primary" />
 
       <ToastContainer />
     </div>

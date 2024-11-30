@@ -22,8 +22,6 @@ export enum TipoCupon {
 
 export enum CategoriaComprador {
   Todos = 1,
-  Frecuente = 2,
-  Minorista = 3,
-  Mayorista = 4,
-  Inactivo = 5,
+  Minorista = 2,
+  Mayorista = 3,
 }
