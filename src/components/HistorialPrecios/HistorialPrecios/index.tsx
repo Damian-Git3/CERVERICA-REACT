@@ -91,13 +91,13 @@ export function HistorialPrecios() {
           />
         </DataTable>
       </div>
-      {
+      {idReceta !== undefined && idReceta !== null && (
         <ModalReceta
           modalVisible={modalVisible}
           idReceta={idReceta}
           setModalVisible={setModalVisible}
         />
-      }
+      )}
     </div>
   );
 }
