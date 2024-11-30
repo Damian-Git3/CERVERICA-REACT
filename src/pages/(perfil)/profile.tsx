@@ -73,7 +73,7 @@ const Profile = () => {
       {userMayoristaDetails ? (
         <>
           <div className="profile-header">
-            <h2>Información del perfil</h2>
+            <h2 className="profile-title">Información del perfil</h2>
           </div>
 
           <div className="user-info-container">
@@ -84,7 +84,7 @@ const Profile = () => {
           </div>
 
           <div className="profile-header">
-            <h2>Mi Empresa</h2>
+            <h2 className="profile-title">Mi Empresa</h2>
           </div>
 
           <div className="user-info-container">
@@ -97,7 +97,7 @@ const Profile = () => {
       ) : userDetails ? (
         <>
           <div className="profile-header">
-            <h2>Información del perfil</h2>
+            <h2 className="profile-title">Información del perfil</h2>
           </div>
 
           <div className="user-info-container">
