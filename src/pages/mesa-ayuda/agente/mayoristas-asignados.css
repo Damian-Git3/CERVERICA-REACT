@@ -1,0 +1,29 @@
+.container {
+    padding: 10px;
+  }
+  
+  .title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .search-input {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .card-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .card {
+    padding: 1rem;
+  }
+  
+  .card p {
+    margin: 0.5rem 0;
+  }
+  

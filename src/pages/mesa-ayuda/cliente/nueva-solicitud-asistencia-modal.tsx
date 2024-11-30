@@ -5,6 +5,7 @@ import { InputTextarea } from "primereact/inputtextarea";
 import { Dropdown } from "primereact/dropdown";
 import useSolicitudesAsistencias from "../../../hooks/useSolicitudesAsistencias";
 import { ToastContext } from "../../../App";
+import "primereact/resources/themes/saga-orange/theme.css";
 
 
 const NuevaSolicitudAsistenciaModal = ({ recargar }) => {
@@ -18,7 +19,15 @@ const NuevaSolicitudAsistenciaModal = ({ recargar }) => {
   } = useSolicitudesAsistencias();
 
 
-  const { showToast } = useContext(ToastContext);
+  const toast = useContext(ToastContext);
+
+  const showToast = ({
+    severity = "error" as "error" | "success" | "info" | "warn" | "secondary" | "contrast" | undefined,
+    summary = "Error",
+    detail = "No se pudo completar la acción.",
+  }) => {
+    toast?.current?.show({ severity, summary, detail, life: 3000 });
+  };
 
   const formValido = categoriaSeleccionada && descripcion.trim().length > 0;
 
@@ -39,8 +48,8 @@ const NuevaSolicitudAsistenciaModal = ({ recargar }) => {
         tipo: 0, // Puedes ajustar este valor según sea necesario
       };
 
-      const response = { status: 200 }; // simulacion de respuestaT
-      //const response = await crearSolicitudAsistencia(nuevaSolicitud);
+      //const response = { status: 200 }; // simulacion de respuesta
+      const response = await crearSolicitudAsistencia(nuevaSolicitud);
       console.log(response.status);
       if (response?.status === 200) {
         showToast({
