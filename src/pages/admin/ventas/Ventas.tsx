@@ -16,7 +16,7 @@ const Ventas = () => {
   };
 
 
-  const navigateToReporte = (param) => {
+  const navigateToReporte = (param: any) => {
     navigate(`/(admin)/reporte-ventas?param=${param}`);
   };
 
