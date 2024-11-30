@@ -32,7 +32,7 @@ const modules: Module[] = [
   {
     name: "Precios",
     icon: "pi pi-dollar",
-    route: "/(admin)/HistorialPrecios",
+    route: "/historial-precios",
     roles: ["Admin"],
   },
   {
