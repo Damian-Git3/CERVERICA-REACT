@@ -17,7 +17,7 @@ interface Module {
 }
 
 const modules: Module[] = [
-  {
+  /* {
     name: "Vendedores",
     icon: "pi pi-users",
     route: "/(admin)/ventas",
@@ -28,7 +28,7 @@ const modules: Module[] = [
     icon: "pi pi-users",
     route: "/(admin)/ventas",
     roles: ["Admin"],
-  },
+  }, */
   {
     name: "Precios",
     icon: "pi pi-dollar",
