@@ -1,29 +1,27 @@
-import { useState, useContext, useEffect } from "react";
-import { ToastContainer, toast } from "react-toastify"; // Usamos react-toastify para los mensajes
-import "react-toastify/dist/ReactToastify.css"; // Importamos los estilos de react-toastify
-import { useLocation, useParams } from "react-router-dom"; // Cambio para la navegación
-import useCambioAgente from "./../../hooks/useCambioAgente"; // Mantengo el hook
+import { useState, useEffect, useRef } from "react";
+import { Toast } from "primereact/toast"; // Componente de notificaciones
+import { Card } from "primereact/card"; // Para las tarjetas
+import { Tag } from "primereact/tag"; // Etiquetas de estado
+import { useLocation } from "react-router-dom"; // Para la navegación
+import useCambioAgente from "../../hooks/useCambioAgente";
 
 const MisSolicitudesCambioAgente = () => {
-
   const { getSolicitudesCliente, solicitudesClienteCambioAgente } = useCambioAgente();
-
-  const location = useLocation(); // Asegúrate de que useLocation esté importado
+  const location = useLocation();
   const userMayoristaDetails = location.state?.userMayoristaDetails || null;
 
-  const [modalVisible, setModalVisible] = useState(false);
   const [timelineData, setTimelineData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Función para convertir y formatear la fecha
+  const toast = useRef(null); // Referencia para las notificaciones
+
+  // Función para convertir y formatear fechas
   const convertAndFormatDate = (dateString) => {
     const date = new Date(dateString);
-
     if (isNaN(date.getTime())) {
       console.error("Fecha inválida:", dateString);
       return "Fecha inválida";
     }
-
     const options = {
       day: "numeric",
       month: "long",
@@ -32,7 +30,6 @@ const MisSolicitudesCambioAgente = () => {
       minute: "2-digit",
       hour12: true,
     };
-
     return date.toLocaleString("es-ES", options);
   };
 
@@ -40,7 +37,6 @@ const MisSolicitudesCambioAgente = () => {
     const formattedData = solicitudesClienteCambioAgente.map((solicitud) => ({
       title: "Solicitud de cambio de agente",
       description: solicitud.motivo,
-      lineColor: "#009688",
       status: solicitud.estatus,
       fechaSolicitud: solicitud.fechaSolicitud
         ? convertAndFormatDate(solicitud.fechaSolicitud)
@@ -52,7 +48,6 @@ const MisSolicitudesCambioAgente = () => {
       nuevoAgente: solicitud.agenteVentaNuevoNombre,
       motivoRechazo: solicitud.motivoRechazo,
     }));
-
     setTimelineData(formattedData);
   }, [solicitudesClienteCambioAgente]);
 
@@ -62,7 +57,7 @@ const MisSolicitudesCambioAgente = () => {
         try {
           await getSolicitudesCliente(userMayoristaDetails.idMayorista);
         } catch (error) {
-          toast.error("No se pudieron cargar las solicitudes.");
+          toast.current.show({ severity: "error", summary: "Error", detail: "No se pudieron cargar las solicitudes." });
         } finally {
           setIsLoading(false);
         }
@@ -72,80 +67,82 @@ const MisSolicitudesCambioAgente = () => {
     fetchSolicitudes();
   }, []);
 
+  const getStatusTag = (status) => {
+    switch (status) {
+      case "Aceptado":
+        return <Tag value="Aceptado" severity="success" />;
+      case "Rechazado":
+        return <Tag value="Rechazado" severity="danger" />;
+      default:
+        return <Tag value="Pendiente" severity="warning" />;
+    }
+  };
+
   if (isLoading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh" }}>
-        <div className="spinner"></div>
+      <div className="flex justify-content-center align-items-center h-screen">
+        <i className="pi pi-spin pi-spinner" style={{ fontSize: "2em" }}></i>
         <p>Cargando solicitudes...</p>
       </div>
     );
   }
 
   if (!userMayoristaDetails || !userMayoristaDetails.agenteVenta) {
-    toast.error("Detalles del agente no disponibles.");
+    toast.current.show({ severity: "error", summary: "Error", detail: "Detalles del agente no disponibles." });
     return null;
   }
 
-  const renderTimelineItem = (item) => {
+  const renderTimelineItem = (item, index) => {
     return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          margin: "10px 0",
-          backgroundColor: "white",
-          borderRadius: "10px",
-          padding: "10px",
-          borderColor:
-            item.status === "Aceptado"
-              ? "#4CAF50"
-              : item.status === "Rechazado"
-              ? "#F44336"
-              : item.status === "Pendiente"
-              ? "#ed9224"
-              : "#000",
-          borderWidth: "1px",
-        }}
+      <Card
+        key={index}
+        title={item.title}
+        subTitle={<div className="flex align-items-center">{getStatusTag(item.status)}</div>}
+        className="mb-4 shadow-2"
+        style={{ width: '100%' }} 
       >
-        <div style={{ flex: 1 }}>
-          <h3>{item.title}</h3>
-          <p>Agente a cambiar: {item.agenteVenta}</p>
-          <p>Motivo del cambio: {item.description}</p>
-          <p style={{ fontStyle: "italic" }}>Fecha de solicitud: {item.fechaSolicitud}</p>
-
-          {item.status === "Aceptado" && (
-            <>
-              <p style={{ color: "#4CAF50" }}>Estado: Aceptada</p>
-              <p>Nuevo Agente: {item.nuevoAgente}</p>
-              <p>Fecha de respuesta: {item.fechaRespuesta}</p>
-            </>
-          )}
-
-          {item.status === "Rechazada" && (
-            <>
-              <p style={{ color: "#F44336" }}>Estado: Rechazada</p>
-              <p>Fecha de respuesta: {item.fechaRespuesta}</p>
-              <p>Motivo del rechazo: {item?.motivoRechazo}</p>
-            </>
-          )}
-
-          {item.status === "Pendiente" && (
-            <p style={{ color: "#ed9224" }}>Estado: Pendiente</p>
-          )}
+        <div className="mb-3">
+          <strong>Agente actual:</strong> {item.agenteVenta}
         </div>
-      </div>
+        <div className="mb-3">
+          <strong>Motivo:</strong> {item.description}
+        </div>
+        <div className="mb-3">
+          <strong>Fecha de solicitud:</strong> {item.fechaSolicitud}
+        </div>
+        {item.status === "Aceptado" && (
+          <>
+            <div className="mb-3">
+              <strong>Nuevo agente:</strong> {item.nuevoAgente}
+            </div>
+            <div className="mb-3">
+              <strong>Fecha de respuesta:</strong> {item.fechaRespuesta}
+            </div>
+          </>
+        )}
+        {item.status === "Rechazado" && (
+          <>
+            <div className="mb-3">
+              <strong>Fecha de respuesta:</strong> {item.fechaRespuesta}
+            </div>
+            <div>
+              <strong>Motivo del rechazo:</strong> {item.motivoRechazo}
+            </div>
+          </>
+        )}
+      </Card>
     );
   };
 
   return (
-    <div style={{ padding: "20px" }}>
-      <div style={{ marginBottom: "20px" }}>
-        <h1>Mis Solicitudes de Cambio de Agente de Ventas</h1>
-      </div>
-
-      <div>
+    <div className="p-4">
+      <Toast ref={toast} />
+      <h1 className="text-center mb-4">Mis Solicitudes de Cambio de Agente</h1>
+      <div className="grid">
         {timelineData.map((item, index) => (
-          <div key={index}>{renderTimelineItem(item)}</div>
+          <div key={index} className="col-12 md:col-6 lg:col-4" style={{ width: '100%' }}>
+            {renderTimelineItem(item, index)}
+          </div>
         ))}
       </div>
     </div>

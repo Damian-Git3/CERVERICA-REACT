@@ -3,8 +3,9 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useConfiguracionVentasMayoreo from "../../../hooks/useConfiguracionVentasMayoreo";
-import { Switch } from "antd"; // Importa Switch de Ant Design
-import "./FormularioConfiguracionVentasMayoreo.css"; // Importar el archivo CSS
+import { InputSwitch } from 'primereact/inputswitch';
+import { InputText } from 'primereact/inputtext'; // PrimeReact InputText
+import { Button } from 'primereact/button'; // PrimeReact Button
 
 interface IConfiguracionVentasMayoreo {
   id: number;
@@ -18,7 +19,9 @@ const FormularioConfiguracionVentasMayoreo: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const configuracion = location.state?.configuracionVentasMayoreo || null;
-  
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const [toastMessage, setToastMessage] = useState<string>("");
+
   const {
     registrarConfiguracionVentasMayoreo,
     actualizarConfiguracionVentasMayoreo,
@@ -45,11 +48,9 @@ const FormularioConfiguracionVentasMayoreo: React.FC = () => {
   }, [configuracion]);
 
   const handleChange = (name: string, value: any) => {
-    // Asegúrate de que el valor sea numérico o 0 en caso de vacío
-    const numericValue = value === "" ? 0 : parseFloat(value);
     setFormValues((prevValues) => ({
       ...prevValues,
-      [name]: name === "pagosMensuales" ? value : numericValue,
+      [name]: name === "pagosMensuales" ? value : value || 0, // Asegura que los campos numéricos se manejen correctamente
     }));
   };
 
@@ -58,7 +59,24 @@ const FormularioConfiguracionVentasMayoreo: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const fechaFormatoAPI = formatFechaModificacion(new Date());
+    const formErrors = validateForm();
+    setErrors(formErrors);
+
+    if (Object.keys(formErrors).length > 0) {
+      toast.error("Por favor corrige los errores antes de continuar.");
+      return;
+    }
+
+    const fechaSolicitud = new Date();
+    const year = fechaSolicitud.getFullYear();
+    const month = String(fechaSolicitud.getMonth() + 1).padStart(2, "0");
+    const day = String(fechaSolicitud.getDate()).padStart(2, "0");
+    const hours = String(fechaSolicitud.getHours()).padStart(2, "0");
+    const minutes = String(fechaSolicitud.getMinutes()).padStart(2, "0");
+    const seconds = String(fechaSolicitud.getSeconds()).padStart(2, "0");
+    const milliseconds = String(fechaSolicitud.getMilliseconds()).padStart(3, "0");
+
+    const fechaFormatoAPI = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
 
     const dataToSend = {
       ...formValues,
@@ -73,68 +91,74 @@ const FormularioConfiguracionVentasMayoreo: React.FC = () => {
         await registrarConfiguracionVentasMayoreo(dataToSend);
         toast.success("Configuración registrada con éxito.");
       }
-      navigate(-1); 
+      navigate(-1);
     } catch (error) {
       console.error("Error al registrar o actualizar:", error);
       toast.error("Hubo un problema al procesar la solicitud.");
     }
   };
 
-  // Función para manejar la validación de los inputs
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    const key = e.key;
-    // Solo permitir teclas numéricas y otras teclas (como backspace y enter)
-    if (!/[0-9]/.test(key) && key !== "Backspace" && key !== "Enter") {
-      e.preventDefault();
-    }
+  const validateForm = () => {
+    let formErrors: { [key: string]: string } = {};
+    if (formValues.plazoMaximoPago <= 0) formErrors.plazoMaximoPago = "Plazo máximo de pago debe ser mayor a 0";
+    if (formValues.montoMinimoMayorista <= 0) formErrors.montoMinimoMayorista = "Monto mínimo mayorista debe ser mayor a 0";
+    return formErrors;
+  };
+
+  const handleInputChange = (e: React.FormEvent<HTMLInputElement>, name: string) => {
+    // Filtra solo los números
+    const value = e.currentTarget.value.replace(/[^0-9]/g, '');
+    handleChange(name, value);
   };
 
   return (
     <div className="container">
-      <h1 className="title">
-        {configuracion ? "Actualizar" : "Registrar"} Configuración de Ventas
-        Mayoreo
-      </h1>
+      <h1>{configuracion ? "Actualizar" : "Registrar"} Configuración de Ventas Mayoreo</h1>
 
-      <div className="form-group">
-        <label className="label">Plazo Máximo de Pago:</label>
-        <input
-          className="input"
-          type="text"
-          value={formValues.plazoMaximoPago}
-          onChange={(e) => handleChange("plazoMaximoPago", e.target.value)}
-          onKeyDown={handleKeyPress} // Limitar a números
-        />
-        {formValues.plazoMaximoPago <= 0 && (
-          <span className="error">El plazo máximo de pago debe ser mayor que 0</span>
-        )}
+      <div className="p-field p-grid w-50">
+        <label htmlFor="plazoMaximoPago" className="p-col-12 p-md-2">Plazo Máximo de Pago:</label>
+        <div className="p-col-12 p-md-10">
+          <InputText
+            className="w-100"
+            id="plazoMaximoPago"
+            value={formValues.plazoMaximoPago}
+            onInput={(e) => handleInputChange(e, "plazoMaximoPago")}
+          />
+          {formValues.plazoMaximoPago <= 0 && (
+            <span className="p-error">El plazo máximo de pago debe ser mayor que 0</span>
+          )}
+        </div>
       </div>
 
-      <div className="form-group">
-        <label className="label">Pagos Mensuales:</label>
-        <Switch
-          checked={formValues.pagosMensuales}
-          onChange={(checked) => handleChange("pagosMensuales", checked)}
-        />
+      <div className="p-field p-grid w-50">
+        <label htmlFor="pagosMensuales" className="p-col-12 p-md-2">Pagos Mensuales:</label>
+        <div className="p-col-12 p-md-10">
+          <InputSwitch
+            id="pagosMensuales"
+            checked={formValues.pagosMensuales}
+            onChange={(e) => handleChange('pagosMensuales', e.value)}
+          />
+        </div>
       </div>
 
-      <div className="form-group">
-        <label className="label">Monto Mínimo Mayorista:</label>
-        <input
-          className="input"
-          type="text"
-          value={formValues.montoMinimoMayorista}
-          onChange={(e) => handleChange("montoMinimoMayorista", e.target.value)}
-          onKeyDown={handleKeyPress} // Limitar a números
-        />
-        {formValues.montoMinimoMayorista <= 0 && (
-          <span className="error">El monto mínimo mayorista debe ser mayor que 0</span>
-        )}
+      <div className="p-field p-grid w-50">
+        <label htmlFor="montoMinimoMayorista" className="p-col-12 p-md-2">Monto Mínimo Mayorista:</label>
+        <div className="p-col-12 p-md-10">
+          <InputText
+            className="w-100"
+            id="montoMinimoMayorista"
+            value={formValues.montoMinimoMayorista}
+            onInput={(e) => handleInputChange(e, "montoMinimoMayorista")}
+          />
+          {formValues.montoMinimoMayorista <= 0 && (
+            <span className="p-error">El monto mínimo mayorista debe ser mayor que 0</span>
+          )}
+        </div>
       </div>
 
-      <button className="button" onClick={handleSubmit}>
-        {configuracion ? "Actualizar" : "Registrar"} Configuración
-      </button>
+      <br />
+
+      <Button label={configuracion ? "Actualizar" : "Registrar"} onClick={handleSubmit} className="p-button-primary" />
 
       <ToastContainer />
     </div>
