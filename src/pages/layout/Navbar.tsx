@@ -50,7 +50,7 @@ const modules: Module[] = [
   {
     name: "Dashboard",
     icon: "pi pi-chart-bar",
-    route: "/(admin)/(dashboard)",
+    route: "/(admin)/dashboard",
     roles: ["Admin"],
   },
   {
