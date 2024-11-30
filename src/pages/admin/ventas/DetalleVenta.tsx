@@ -3,16 +3,17 @@ import { useNavigate, useLocation } from "react-router-dom";
 import useVentas from "../../../hooks/useVentas";
 import ModalVenta from "../../../components/ModalVenta";
 import { DetalleVenta } from "../../../models/venta";
-import { Button } from 'primereact/button';
-import { Badge } from 'primereact/badge';
-import { ProgressSpinner } from 'primereact/progressspinner';
-import { Card } from 'primereact/card';
-import { PrimeIcons } from 'primereact/api';
-import { Dialog } from 'primereact/dialog';
-import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+import { Button } from "primereact/button";
+import { Badge } from "primereact/badge";
+import { ProgressSpinner } from "primereact/progressspinner";
+import { Card } from "primereact/card";
+import { PrimeIcons } from "primereact/api";
+import { Dialog } from "primereact/dialog";
+import { ConfirmDialog, confirmDialog } from "primereact/confirmdialog";
 
 const DetalleVentaScreen = () => {
-  const { selectedVenta, getVenta, retrocederStatus, empaquetar, cargando } = useVentas();
+  const { selectedVenta, getVenta, retrocederStatus, empaquetar, cargando } =
+    useVentas();
   const [modalVisible, setModalVisible] = useState(false);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ const DetalleVentaScreen = () => {
 
   useEffect(() => {
     const params = new URLSearchParams(location.search);
-    const id = params.get('id');
+    const id = params.get("id");
     if (id) {
       getVenta(Number(id));
     }
@@ -34,7 +35,7 @@ const DetalleVentaScreen = () => {
 
   const handleUpdateVenta = async () => {
     const params = new URLSearchParams(location.search);
-    const id = params.get('id');
+    const id = params.get("id");
     if (id) {
       await getVenta(Number(id));
     }
@@ -42,9 +43,9 @@ const DetalleVentaScreen = () => {
 
   const retrocederPaso = async (idVenta) => {
     confirmDialog({
-      message: '¿Estás seguro de retroceder el estatus de esta venta?',
-      header: 'Confirmación',
-      icon: 'pi pi-exclamation-triangle',
+      message: "¿Estás seguro de retroceder el estatus de esta venta?",
+      header: "Confirmación",
+      icon: "pi pi-exclamation-triangle",
       accept: async () => {
         try {
           await retrocederStatus(idVenta);
@@ -55,15 +56,15 @@ const DetalleVentaScreen = () => {
       },
       reject: () => {
         // Acción en caso de rechazo
-      }
+      },
     });
   };
 
   const avanzarEmpaquetar = async (idVenta) => {
     confirmDialog({
-      message: '¿Estás seguro de avanzar al siguiente paso?',
-      header: 'Confirmación',
-      icon: 'pi pi-exclamation-triangle',
+      message: "¿Estás seguro de avanzar al siguiente paso?",
+      header: "Confirmación",
+      icon: "pi pi-exclamation-triangle",
       accept: async () => {
         try {
           await empaquetar(idVenta);
@@ -75,7 +76,7 @@ const DetalleVentaScreen = () => {
       },
       reject: () => {
         // Acción en caso de rechazo
-      }
+      },
     });
   };
 
@@ -83,42 +84,46 @@ const DetalleVentaScreen = () => {
     setModalVisible(true);
   };
 
-  const renderItem = (item) => (
-    <div key={item.id} className="mb-2">
-      <Card className="p-shadow-2">
-        <div className="flex align-items-center">
-          <img
-            src={item.stock.receta.imagen}
-            className="w-24 h-24 mr-2"
-            alt={item.stock.receta.nombre}
-          />
-          <div className="flex-1">
-            <p className="text-lg font-bold">{item.stock.receta.nombre}</p>
-            <p className="text-base">Cantidad: {item.cantidad}</p>
-            <p className="text-base">Pack: {item.pack} cervezas</p>
-            <p className="text-base">Costo Unitario: {item.costoUnitario}</p>
-            <p className="text-base">Total: {item.montoVenta}</p>
+  const renderItem = (item) => {
+    console.log(item);
+
+    return (
+      <div key={item.id} className="mb-2">
+        <Card className="p-shadow-2">
+          <div className="flex align-items-center">
+            <img
+              src={item.stock.receta.imagen}
+              className="w-24 h-24 mr-2"
+              alt={item.stock.receta.nombre}
+            />
+            <div className="flex-1">
+              <p className="text-lg font-bold">{item.stock.receta.nombre}</p>
+              <p className="text-base">Cantidad: {item.cantidad}</p>
+              <p className="text-base">
+                Pack: {item.pack == 0 ? "1" : item.pack} cervezas
+              </p>
+              <p className="text-base">Costo Unitario: {item.costoUnitario}</p>
+              <p className="text-base">Total: {item.montoVenta}</p>
+            </div>
           </div>
-        </div>
-      </Card>
-    </div>
-  );
+        </Card>
+      </div>
+    );
+  };
 
   return (
     <div className="p-5 surface-ground rounded-lg shadow-md">
       <h2 className="text-2xl font-bold mb-4 text-center">Venta</h2>
       <hr className="mb-5" />
-      {error && (
-        <div className="text-center text-red-500 mb-4">
-          {error}
-        </div>
-      )}
+      {error && <div className="text-center text-red-500 mb-4">{error}</div>}
       {selectedVenta ? (
         <>
           <Card className="p-shadow-2 mb-4">
             <div className="grid">
               <div className="col-12 md:col-6">
-                <p className="text-lg"><strong>ID:</strong> {selectedVenta.id}</p>
+                <p className="text-lg">
+                  <strong>ID:</strong> {selectedVenta.id}
+                </p>
                 <p className="text-lg">
                   <strong>Fecha de la venta:</strong>{" "}
                   {new Date(selectedVenta.fechaVenta).toLocaleString("es-ES", {
@@ -129,14 +134,32 @@ const DetalleVentaScreen = () => {
                     minute: "2-digit",
                   })}
                 </p>
-                <p className="text-lg"><strong>Total de cervezas:</strong> {selectedVenta.totalCervezas}</p>
-                <p className="text-lg"><strong>Metodo de envio:</strong> {obtenerMetodoEnvio(selectedVenta.metodoEnvio)}</p>
-                <p className="text-lg"><strong>Metodo de pago:</strong> {obtenerMetodoPago(selectedVenta.metodoPago)}</p>
+                <p className="text-lg">
+                  <strong>Total de cervezas:</strong>{" "}
+                  {selectedVenta.totalCervezas}
+                </p>
+                <p className="text-lg">
+                  <strong>Metodo de envio:</strong>{" "}
+                  {obtenerMetodoEnvio(selectedVenta.metodoEnvio)}
+                </p>
+                <p className="text-lg">
+                  <strong>Metodo de pago:</strong>{" "}
+                  {obtenerMetodoPago(selectedVenta.metodoPago)}
+                </p>
                 <p className="text-lg">
                   <strong>Estatus:</strong>{" "}
-                  <Badge value={obtenerNombreEstatusVenta(selectedVenta.estatusVenta)} severity={obtenerSeverityEstatusVenta(selectedVenta.estatusVenta)} />
+                  <Badge
+                    value={obtenerNombreEstatusVenta(
+                      selectedVenta.estatusVenta
+                    )}
+                    severity={obtenerSeverityEstatusVenta(
+                      selectedVenta.estatusVenta
+                    )}
+                  />
                 </p>
-                <p className="text-lg"><strong>Monto:</strong> ${selectedVenta.montoVenta}</p>
+                <p className="text-lg">
+                  <strong>Monto:</strong> ${selectedVenta.montoVenta}
+                </p>
               </div>
               <div className="col-12 md:col-6 flex flex-column align-items-center justify-content-center">
                 {selectedVenta.estatusVenta !== 1 && (
@@ -167,11 +190,15 @@ const DetalleVentaScreen = () => {
             </div>
           </Card>
 
-          <h2 className="text-2xl font-bold mb-4 text-center">Detalle de Venta</h2>
+          <h2 className="text-2xl font-bold mb-4 text-center">
+            Detalle de Venta
+          </h2>
           <hr className="mb-5" />
           <p className="text-lg">Productos:</p>
           <div className="mb-5">
-            <h3 className="text-2xl font-bold">Venta total de: {selectedVenta.totalCervezas} cervezas</h3>
+            <h3 className="text-2xl font-bold">
+              Venta total de: {selectedVenta.totalCervezas} cervezas
+            </h3>
           </div>
           <div className="flex flex-column">
             {selectedVenta.productosPedido.map(renderItem)}
@@ -182,7 +209,10 @@ const DetalleVentaScreen = () => {
                 <ProgressSpinner />
               ) : (
                 <>
-                  <i className={`pi ${PrimeIcons.SEARCH_MINUS} p-mr-2`} style={{ fontSize: '2em' }}></i>
+                  <i
+                    className={`pi ${PrimeIcons.SEARCH_MINUS} p-mr-2`}
+                    style={{ fontSize: "2em" }}
+                  ></i>
                   <p className="text-lg">No se encontraron ventas</p>
                 </>
               )}
@@ -198,7 +228,12 @@ const DetalleVentaScreen = () => {
           )}
         </div>
       )}
-      <Dialog header="Empaquetar Cervezas" visible={modalVisible} style={{ width: '50vw' }} onHide={() => setModalVisible(false)}>
+      <Dialog
+        header="Empaquetar Cervezas"
+        visible={modalVisible}
+        style={{ width: "50vw" }}
+        onHide={() => setModalVisible(false)}
+      >
         {selectedVenta && (
           <ModalVenta
             modalVisible={modalVisible}
@@ -233,6 +268,8 @@ const obtenerMetodoPago = (metodoPago) => {
       return "Contraentrega 💵";
     case 2:
       return "Tarjeta de credito 💳";
+    case 4:
+      return "Plazos 💵";
     default:
       return "Método de pago Desconocido";
   }
