@@ -119,6 +119,7 @@ const FormularioConfiguracionVentasMayoreo: React.FC = () => {
         <label htmlFor="plazoMaximoPago" className="p-col-12 p-md-2">Plazo Máximo de Pago:</label>
         <div className="p-col-12 p-md-10">
           <InputText
+            style={{ width: '100%' }}
             className="w-100"
             id="plazoMaximoPago"
             value={formValues.plazoMaximoPago}
@@ -130,7 +131,7 @@ const FormularioConfiguracionVentasMayoreo: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: '50%' }}>
         <label htmlFor="pagosMensuales" className="p-col-12 p-md-2">Pagos Mensuales:</label>
         <div className="p-col-12 p-md-10">
           <InputSwitch
@@ -145,6 +146,7 @@ const FormularioConfiguracionVentasMayoreo: React.FC = () => {
         <label htmlFor="montoMinimoMayorista" className="p-col-12 p-md-2">Monto Mínimo Mayorista:</label>
         <div className="p-col-12 p-md-10">
           <InputText
+            style={{ width: '100%' }}
             className="w-100"
             id="montoMinimoMayorista"
             value={formValues.montoMinimoMayorista}

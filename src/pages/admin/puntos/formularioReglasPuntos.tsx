@@ -113,11 +113,12 @@ const FormularioReglasPuntos: React.FC = () => {
     <div className="container">
       <h1>{reglasPuntos ? "Actualizar" : "Registrar"} Reglas de Puntos</h1>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid" style={{ width: "50%"}}>
         <label className="p-col-12 p-md-2">Valor MXN por Punto:</label>
         <div className="p-col-12 p-md-10">
           <InputText
             className="w-100"
+            style={{ width: '100%' }}
             value={formValues.valorMXNPunto}
             onChange={(e) => handleChange("valorMXNPunto", e.target.value)}
             onKeyDown={handleKeyDown}
@@ -126,11 +127,12 @@ const FormularioReglasPuntos: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid" style={{ width: "50%"}}>
         <label className="p-col-12 p-md-2">Monto Mínimo:</label>
         <div className="p-col-12 p-md-10">
           <InputText
             className="w-100"
+            style={{ width: '100%' }}
             value={formValues.montoMinimo}
             onChange={(e) => handleChange("montoMinimo", e.target.value)}
             onKeyDown={handleKeyDown}
@@ -139,11 +141,12 @@ const FormularioReglasPuntos: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-field p-grid w-50">
+      <div className="p-field p-grid w-50" style={{ width: "50%"}}>
         <label className="p-col-12 p-md-2">Porcentaje de Conversión:</label>
         <div className="p-col-12 p-md-10">
           <InputText
             className="w-100"
+            style={{ width: '100%' }}
             value={formValues.porcentajeConversion}
             onChange={(e) => handleChange("porcentajeConversion", e.target.value)}
             onKeyDown={handleKeyDown}
