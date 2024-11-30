@@ -2,9 +2,10 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import "./config/AxiosConfig.ts";
+import { PrimeReactProvider } from 'primereact/api';
 
 // PrimeReact
-import { PrimeReactProvider } from "primereact/api";
+
 import "primereact/resources/themes/lara-light-blue/theme.css";
 import "primeicons/primeicons.css";
 import "primeflex/primeflex.css";

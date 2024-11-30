@@ -30,6 +30,7 @@ import SolicitudAsistenciaCliente from "./pages/mesa-ayuda/cliente/solicitud-asi
 import { Toast } from "primereact/toast";
 import React, { useRef } from "react";
 import DetalleSolicitudAsistencia from "./pages/mesa-ayuda/cliente/detalle-solicitud";
+import { HistorialPrecios } from "./components/HistorialPrecios/HistorialPrecios";
 
 export const ToastContext = React.createContext<React.RefObject<Toast> | null>(
   null
@@ -128,6 +129,7 @@ const App = () => {
                 path="/mesa-ayuda-agente"
                 element={<SolicitudAsistenciaCliente />}
               />
+              <Route path="/historial-precios" element={<HistorialPrecios />} />
             </Route>
           </Route>
 
