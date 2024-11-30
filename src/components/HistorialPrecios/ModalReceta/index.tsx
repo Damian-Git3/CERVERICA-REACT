@@ -35,9 +35,7 @@ const ModalReceta: React.FC<ModalRecetaProps> = ({
 
   useEffect(() => {
     const fetchHistorialPrecios = async () => {
-      console.log(modalNuevoHistorialVisible);
-      console.log(idReceta);
-      if (modalNuevoHistorialVisible == false && idReceta) {
+      if (!modalNuevoHistorialVisible && idReceta) {
         await getHistorialPrecios(idReceta);
       }
     };
@@ -45,7 +43,7 @@ const ModalReceta: React.FC<ModalRecetaProps> = ({
   }, [modalNuevoHistorialVisible]);
 
   useEffect(() => {
-    console.log(receta);
+    console.log("receta", receta);
   }, [receta]);
 
   const footerContent = (
