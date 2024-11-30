@@ -12,9 +12,9 @@ const ReporteVentasScreen = () => {
   }, [location]);
 
   const items = [
-    { label: 'Semana', icon: 'pi pi-calendar', command: () => { navigate("/reporte-ventas?param=semana"); }},
-    { label: 'Mes', icon: 'pi pi-calendar-plus', command: () => { navigate("/reporte-ventas?param=mes"); }},
-    { label: 'Año', icon: 'pi pi-calendar-times', command: () => { navigate("/reporte-ventas?param=anio"); }}
+    { label: 'Semana', icon: 'pi pi-calendar', command: () => { navigate("/(admin)/reporte-ventas?param=semana"); }},
+    { label: 'Mes', icon: 'pi pi-calendar-plus', command: () => { navigate("/(admin)/reporte-ventas?param=mes"); }},
+    { label: 'Año', icon: 'pi pi-calendar-times', command: () => { navigate("/(admin)/reporte-ventas?param=anio"); }}
   ];
 
   const getParam = () => {
