@@ -1,0 +1,31 @@
+:root {
+  --color-principal: #ed9224;
+  --color-card: rgba(186, 183, 180, 0.3);
+  --color-secundario: #f5d9ab;
+  --color-gris: rgba(128, 128, 128, 1);
+}
+
+@font-face {
+  font-family: "Futura";
+  src: url("../assets/fonts/futura.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Futura", sans-serif;
+}
+
+.active div a span {
+  color: var(--color-principal);
+}
+
+.p-highlight a .p-steps-number {
+  background-color: var(--color-principal);
+}
+
+.bg-card-light {
+  background-color: #eaeaea8b;
+  min-height: 100vh;
+}
