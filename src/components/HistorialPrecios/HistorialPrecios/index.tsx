@@ -71,7 +71,14 @@ export const HistorialPrecios = () => {
 
   const headerTablePrecios = (
     <div className="flex align-items-center justify-content-between">
-      <Button icon="pi pi-refresh" rounded raised />
+      <Button
+        icon="pi pi-refresh"
+        onClick={() => {
+          loadData();
+        }}
+        rounded
+        raised
+      />
       <IconField iconPosition="left">
         <InputIcon className="pi pi-search"> </InputIcon>
         <InputText
@@ -88,12 +95,20 @@ export const HistorialPrecios = () => {
       <div className="p-d-flex p-flex-column p-ai-center">
         <div className="p-mt-4" style={{ width: "100%" }}>
           <DataTable
+            dataKey="id"
+            sortField="id"
+            sortOrder={1}
+            removableSort
+            sortMode="multiple"
             value={filteredRecetas}
             header={headerTablePrecios}
             paginator
             rows={10}
-            size="small"
+            size="normal"
             rowsPerPageOptions={[5, 10, 25, 50]}
+            emptyMessage="No hay registros"
+            globalFilterFields={["id", "nombre", "precio", "activo"]}
+            selectionMode={"single"}
           >
             <Column field="id" header="ID" sortable />
             <Column field="nombre" header="Nombre" sortable />
