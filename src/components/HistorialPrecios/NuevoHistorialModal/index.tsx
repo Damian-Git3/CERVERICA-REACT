@@ -10,47 +10,53 @@ import useHistorialPrecios from "../../../hooks/useHistorialPrecios";
 interface NuevoHistorialModalProps {
   modalVisible: boolean;
   idReceta: number;
+  setReloadReceta: (reload: boolean) => void;
   setModalVisible: (visible: boolean) => void;
 }
 
 const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
   modalVisible,
   idReceta,
+  setReloadReceta,
   setModalVisible,
 }) => {
   const defaultValues = {
-    precioPaquete1: 0,
-    precioPaquete6: 0,
-    precioPaquete12: 0,
-    precioPaquete24: 0,
-    precioBaseMayoreo: 0,
+    precioPaquete1: null,
+    precioPaquete6: null,
+    precioPaquete12: null,
+    precioPaquete24: null,
+    precioBaseMayoreo: null,
   };
 
   const {
     control,
-    formState: { errors },
+    formState: { errors, isValid },
     watch,
     setValue,
     reset,
     getValues,
+    trigger,
   } = useForm({
     defaultValues,
   });
+
+  console.log("errors", errors);
 
   const { setNuevoPrecio } = useHistorialPrecios();
 
   const onSubmit = async () => {
     console.log("idReceta", idReceta);
     console.log(getValues());
-    const data = getValues();
-    const response = await setNuevoPrecio({ ...data, idReceta });
-    console.log("Response", response);
-    if (response) {
-      handleHide();
-    }
+    await trigger();
 
-    setModalVisible(false);
-    reset();
+    if (isValid) {
+      const data = getValues();
+      const response = await setNuevoPrecio({ ...data, idReceta });
+      console.log("Response", response);
+      setReloadReceta(true);
+      setModalVisible(false);
+      reset();
+    }
   };
 
   const precioPaquete1 = watch("precioPaquete1");
@@ -61,7 +67,6 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
   };
 
   useEffect(() => {
-    console.log("Precio Paquete 1", precioPaquete1);
     if (precioPaquete1) {
       setValue("precioPaquete6", precioPaquete1 * 6);
       setValue("precioPaquete12", precioPaquete1 * 12);
@@ -69,10 +74,8 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
     }
   }, [precioPaquete1, setValue]);
 
-  const getFormErrorMessage = (name: keyof typeof errors) => {
-    return (
-      errors[name] && <small className="p-error">{errors[name].message}</small>
-    );
+  const getFormErrorMessage = (name) => {
+    return errors[name] && <small className="p-error">{errors[name].message}</small>;
   };
 
   const footerContent = (
@@ -110,15 +113,20 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
               <Controller
                 name="precioPaquete1"
                 control={control}
+                rules={{
+                  required: "Valor Requerido",
+                }}
                 render={({ field, fieldState }) => (
                   <InputNumber
                     autoFocus
+                    showButtons
                     className={classNames("p-inputtext-sm w-full", {
                       "p-invalid": fieldState.invalid,
                     })}
                     mode="currency"
                     currency="MXN"
                     locale="es-MX"
+                    min={0}
                     value={field.value}
                     onChange={(e) => field.onChange(e.value)}
                   />
@@ -138,6 +146,9 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
               <Controller
                 name="precioPaquete6"
                 control={control}
+                rules={{
+                  required: "Valor Requerido",
+                }}
                 render={({ field, fieldState }) => (
                   <InputNumber
                     className={classNames("p-inputtext-sm w-full", {
@@ -146,6 +157,8 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
                     mode="currency"
                     currency="MXN"
                     locale="es-MX"
+                    showButtons
+                    min={0}
                     value={field.value}
                     onChange={(e) => field.onChange(e.value)}
                   />
@@ -165,6 +178,9 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
               <Controller
                 name="precioPaquete12"
                 control={control}
+                rules={{
+                  required: "Valor Requerido",
+                }}
                 render={({ field, fieldState }) => (
                   <InputNumber
                     className={classNames("p-inputtext-sm w-full", {
@@ -173,6 +189,8 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
                     mode="currency"
                     currency="MXN"
                     locale="es-MX"
+                    showButtons
+                    min={0}
                     value={field.value}
                     onChange={(e) => field.onChange(e.value)}
                   />
@@ -192,6 +210,9 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
               <Controller
                 name="precioPaquete24"
                 control={control}
+                rules={{
+                  required: "Valor Requerido",
+                }}
                 render={({ field, fieldState }) => (
                   <InputNumber
                     className={classNames("p-inputtext-sm w-full", {
@@ -200,6 +221,8 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
                     mode="currency"
                     currency="MXN"
                     locale="es-MX"
+                    showButtons
+                    min={0}
                     value={field.value}
                     onChange={(e) => field.onChange(e.value)}
                   />
@@ -219,8 +242,13 @@ const NuevoHistorialModal: React.FC<NuevoHistorialModalProps> = ({
               <Controller
                 name="precioBaseMayoreo"
                 control={control}
+                rules={{
+                  required: "Valor Requerido",
+                }}
                 render={({ field, fieldState }) => (
                   <InputNumber
+                    showButtons
+                    min={0}
                     className={classNames("p-inputtext-sm w-full", {
                       "p-invalid": fieldState.invalid,
                     })}
