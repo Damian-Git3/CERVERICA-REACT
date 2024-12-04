@@ -56,3 +56,34 @@
     cursor: not-allowed;
   }
   
+  .container-cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas */
+    gap: 16px;
+  }
+  
+  .card-solicitud {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 6px;
+    border-radius: 8px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+  }
+  
+  .bg-1 {
+    background-color: #fff6e3;
+  }
+  .bg-2 {
+    background-color: #ddffe1;
+  }
+  .bg-3 {
+    background-color: #fee5f8;
+  }
+  
+  @media (max-width: 768px) {
+    .container-cards {
+      grid-template-columns: 1fr; /* Una columna en pantallas pequeñas */
+    }
+  }

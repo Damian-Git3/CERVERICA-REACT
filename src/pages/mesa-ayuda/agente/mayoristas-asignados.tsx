@@ -48,7 +48,7 @@ const MayoristasAsignados = () => {
         placeholder="Buscar por nombre, RFC o contacto"
         className="search-input"
       />
-      <div className="card-list">
+      <div className="container-cards">
         {filteredMayoristas.length > 0 ? (
           filteredMayoristas.map((item) => (
             <Card
