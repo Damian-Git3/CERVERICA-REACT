@@ -61,7 +61,7 @@ const modules: Module[] = [
   },
   {
     name: "Solicitud Cambio Agente",
-    icon: "pi pi-exchange",
+    icon: "pi pi-arrow-right-arrow-left",
     route: "/(admin)/cambioAgente/solicitudesCambioAgente",
     roles: ["Admin"],
   },
@@ -139,13 +139,13 @@ export default function Navbar() {
     {
       label: "ERP",
       icon: "pi pi-arrow-left",
-      roles: ["Admin", "Agente", "Operador"],
+      roles: ["Admin", "Operador", "Agente"],
       command: () => {
         window.location.href = `http://localhost:4200/gestion/inicio`;
       },
     },
     {
-      label: "ERP",
+      label: "Landing",
       icon: "pi pi-arrow-left",
       roles: ["Cliente", "Mayorista"],
       command: () => {

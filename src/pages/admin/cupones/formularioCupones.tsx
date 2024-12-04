@@ -48,11 +48,11 @@ const FormularioCupones: React.FC = () => {
       fechaCreacion: cupon?.fechaCreacion || new Date().toISOString(),
       fechaExpiracion: cupon?.fechaExpiracion || "",
       tipo: cupon?.tipo || 2,
-      paquete: cupon?.paquete || 0,
+      paquete: 0,
       cantidad: cupon?.cantidad || 0,
       valor: cupon?.valor || 0,
       usos: cupon?.usos || 0,
-      montoMaximo: cupon?.montoMaximo || 0,
+      montoMaximo: 0,
       montoMinimo: cupon?.montoMinimo || 0,
       activo: cupon?.activo || true,
     },
@@ -92,24 +92,9 @@ const FormularioCupones: React.FC = () => {
     }
   };
 
-  const opcionesPaquete = [
-    { label: "1 cerveza", value: 1 },
-    { label: "6 cervezas", value: 6 },
-    { label: "12 cervezas", value: 12 },
-    { label: "24 cervezas", value: 24 },
-  ];
-
   const opcionesTipoCupon = [
     { label: "Porcentaje", value: 1 },
     { label: "Fijo", value: 2 },
-  ];
-
-  const opcionesCategoriaComprador = [
-    { label: "Todos", value: 1 },
-    { label: "Frecuente", value: 2 },
-    { label: "Minorista", value: 3 },
-    { label: "Mayorista", value: 4 },
-    { label: "Inactivo", value: 5 },
   ];
 
   return (
@@ -190,28 +175,6 @@ const FormularioCupones: React.FC = () => {
         </div>
 
         <div className="field col-12 md:col-6">
-          <label>Paquete:</label>
-          <Controller
-            name="paquete"
-            control={control}
-            rules={{ required: "Debe seleccionar un paquete" }}
-            render={({ field }) => (
-              <>
-                <Dropdown
-                  {...field}
-                  options={opcionesPaquete}
-                  className={`w-full ${errors.paquete ? "p-invalid" : ""}`}
-                  placeholder="Selecciona un paquete"
-                />
-                {errors.paquete && (
-                  <small className="p-error">{errors.paquete.message}</small>
-                )}
-              </>
-            )}
-          />
-        </div>
-
-        <div className="field col-12 md:col-6">
           <label>Cantidad cupones:</label>
           <Controller
             name="cantidad"
@@ -281,19 +244,15 @@ const FormularioCupones: React.FC = () => {
         </div>
 
         <div className="field col-12 md:col-6">
-          <label>{tipoCupon === 1 ? "Monto Máximo" : "Monto Mínimo"}:</label>
+          <label>Monto Mínimo:</label>
           <Controller
-            name={tipoCupon === 1 ? "montoMaximo" : "montoMinimo"}
+            name="montoMinimo"
             control={control}
             rules={{
-              required: `El ${
-                tipoCupon === 1 ? "monto máximo" : "monto mínimo"
-              } es obligatorio`,
+              required: "El monto mínimo es obligatorio",
               min: {
                 value: 1,
-                message: `El ${
-                  tipoCupon === 1 ? "monto máximo" : "monto mínimo"
-                } debe ser mayor a 0`,
+                message: "El monto mínimo debe ser mayor a 0",
               },
             }}
             render={({ field }) => (
@@ -303,24 +262,12 @@ const FormularioCupones: React.FC = () => {
                   mode="currency"
                   currency="MXN"
                   locale="es-MX"
-                  className={`w-full ${
-                    errors[tipoCupon === 1 ? "montoMaximo" : "montoMinimo"]
-                      ? "p-invalid"
-                      : ""
-                  }`}
-                  onChange={(e) =>
-                    setValue(
-                      tipoCupon === 1 ? "montoMaximo" : "montoMinimo",
-                      e.value || 0
-                    )
-                  }
+                  className={`w-full ${errors.montoMinimo ? "p-invalid" : ""}`}
+                  onChange={(e) => setValue("montoMinimo", e.value || 0)}
                 />
-                {errors[tipoCupon === 1 ? "montoMaximo" : "montoMinimo"] && (
+                {errors.montoMinimo && (
                   <small className="p-error">
-                    {
-                      errors[tipoCupon === 1 ? "montoMaximo" : "montoMinimo"]
-                        ?.message
-                    }
+                    {errors.montoMinimo.message}
                   </small>
                 )}
               </>
