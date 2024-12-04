@@ -43,7 +43,7 @@ const SolicitudAsistenciaAgente = () => {
   };
 
   const renderItem = (item) => (
-    <div className="card-container" key={item.id}>
+    <div className="card-solicitud" key={item.id}>
       <Card>
         <h3>{item.nombreCategoria}</h3>
         <p>
@@ -104,7 +104,7 @@ const SolicitudAsistenciaAgente = () => {
       </div>
 
       {filteredSolicitudes != null && filteredSolicitudes.length > 0 ? (
-        <div className="card-list">{filteredSolicitudes.map(renderItem)}</div>
+        <div className="container-cards">{filteredSolicitudes.map(renderItem)}</div>
       ) : (
         <p>No hay solicitudes de asistencia</p>
       )}

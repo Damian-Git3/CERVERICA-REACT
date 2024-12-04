@@ -41,35 +41,33 @@ const SolicitudAsistenciaCliente = () => {
   };
 
   const renderItem = (item) => (
-    <div className="card-container" key={item.id}>
+    <div className="card-solicitud" key={item.id}>
       <Card>
         <h3>{item.nombreCategoria}</h3>
         <p>
           <strong>Descripción:</strong> {item.descripcion}
         </p>
         <p>
-          <strong>Fecha de Solicitud:</strong>{" "}
-          {new Date(item.fechaSolicitud).toLocaleString()}
+          <strong>Fecha de Solicitud:</strong> {new Date(item.fechaSolicitud).toLocaleString()}
         </p>
         <p>
           <strong>Agente:</strong> {item.nombreAgente} ({item.emailAgente})
         </p>
         <p>
           <strong>Estatus:</strong>{" "}
-          {item.estatus === 1
-            ? "Enviado"
-            : item.estatus === 3
-            ? "Cerrado"
-            : "Seguimiento"}
+          {item.estatus === 1 ? "Enviado" : item.estatus === 3 ? "Cerrado" : "Seguimiento"}
         </p>
-        <Button label="Detalles" onClick={()=>navigate(`/solicitud-asistencia/${item.id}`)}></Button>
+        <Button
+          label="Detalles"
+          onClick={() => navigate(`/solicitud-asistencia/${item.id}`)}
+        ></Button>
       </Card>
     </div>
   );
 
   return (
     <div style={{ padding: "20px" }} className=" bg-card-light">
-      <NuevaSolicitudAsistenciaModal recargar={getSolicitudesAsistenciasCliente}/>
+      <NuevaSolicitudAsistenciaModal recargar={getSolicitudesAsistenciasCliente} />
 
       <div style={{ margin: "20px 0" }}>
         <h2>Solicitudes de Asistencia</h2>
@@ -89,9 +87,8 @@ const SolicitudAsistenciaCliente = () => {
           style={{ width: "100%", marginBottom: "20px" }}
         />
       </div>
-
       {filteredSolicitudes != null && filteredSolicitudes.length > 0 ? (
-        <div className="card-list">{filteredSolicitudes.map(renderItem)}</div>
+        <div className="container-cards">{filteredSolicitudes.map(renderItem)}</div>
       ) : (
         <p>No hay solicitudes de asistencia</p>
       )}

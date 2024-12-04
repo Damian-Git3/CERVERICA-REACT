@@ -51,10 +51,7 @@ const DetalleSolicitudAsistenciaAgente = () => {
   const handleSeguimientoModal = () => setModalSeguimientoVisible(true);
 
   const confirmEliminarSolicitud = async () => {
-    const res = await cerrarSolicitudAsistencia(
-      Number(solicitudId),
-      motivoEliminar
-    );
+    const res = await cerrarSolicitudAsistencia(Number(solicitudId), motivoEliminar);
     setModalEliminarVisible(false);
     if (res?.status === 200) {
       navigate("/mesa-ayuda-agente");
@@ -74,8 +71,7 @@ const DetalleSolicitudAsistenciaAgente = () => {
 
   const handleSeguimiento = async (data) => {
     const { descripcion, mensaje } = data;
-    const formValido =
-      descripcion.trim().length > 0 && mensaje.trim().length > 0;
+    const formValido = descripcion.trim().length > 0 && mensaje.trim().length > 0;
     console.log("Data enviada:", data);
     // Lógica para enviar datos al servidor
     if (formValido) {
@@ -127,93 +123,89 @@ const DetalleSolicitudAsistenciaAgente = () => {
       />
       <h2 className="card-title">Detalles de la Solicitud</h2>
 
-      <div className="section">
-        <h3 className="section-title">Datos de la Asistencia</h3>
-        <Card className="p-mt-2">
-          <p>
-            <strong>Descripción:</strong>{" "}
-            {solicitudAsistencia?.solicitud.descripcion}
-          </p>
-          <p>
-            <strong>Fecha de Solicitud:</strong>{" "}
-            {new Date(
-              solicitudAsistencia?.solicitud.fechaSolicitud
-            ).toLocaleString()}
-          </p>
-          <p>
-            <strong>Estatus:</strong>{" "}
-            {solicitudAsistencia?.solicitud.estatus === 3
-              ? "Cerrada"
-              : "Activa"}
-            <br />
-            <br />
-            {solicitudAsistencia?.solicitud.estatus === 3 ? (
-              <>
-                <h2>Valoración</h2>
-                {solicitudAsistencia?.solicitud.valoracion != null ? (
-                  <div>
-                    <strong>Valoración:</strong>{" "}
-                    {"★".repeat(solicitudAsistencia?.solicitud.valoracion) +
-                      "☆".repeat(
-                        10 - solicitudAsistencia?.solicitud.valoracion
-                      )}
-                    <br />
-                    <br />
-                    <strong>Motivo:</strong>{" "}
-                    {solicitudAsistencia?.solicitud.mensajeValoracion}
-                  </div>
+      <div className="container-cards">
+        <div className="card-solicitud">
+          <div className="section">
+            <h3 className="section-title">Datos de la Asistencia</h3>
+            <Card className="p-mt-2 bg-2">
+              <p>
+                <strong>Descripción:</strong> {solicitudAsistencia?.solicitud.descripcion}
+              </p>
+              <p>
+                <strong>Fecha de Solicitud:</strong>{" "}
+                {new Date(solicitudAsistencia?.solicitud.fechaSolicitud).toLocaleString()}
+              </p>
+              <p>
+                <strong>Estatus:</strong>{" "}
+                {solicitudAsistencia?.solicitud.estatus === 3 ? "Cerrada" : "Activa"}
+                <br />
+                <br />
+                {solicitudAsistencia?.solicitud.estatus === 3 ? (
+                  <>
+                    <h2>Valoración</h2>
+                    {solicitudAsistencia?.solicitud.valoracion != null ? (
+                      <div>
+                        <strong>Valoración:</strong>{" "}
+                        {"★".repeat(solicitudAsistencia?.solicitud.valoracion) +
+                          "☆".repeat(10 - solicitudAsistencia?.solicitud.valoracion)}
+                        <br />
+                        <br />
+                        <strong>Motivo:</strong> {solicitudAsistencia?.solicitud.mensajeValoracion}
+                      </div>
+                    ) : (
+                      <p>No hay valoración</p>
+                    )}
+                  </>
                 ) : (
-                  <p>No hay valoración</p>
+                  <></>
                 )}
-              </>
-            ) : (
-              <></>
-            )}
-          </p>
-        </Card>
-      </div>
+              </p>
+            </Card>
+          </div>
+        </div>
 
-      <div className="section">
-        <h3 className="section-title">Datos del cliente</h3>
-        <Card className="p-mt-2">
-          <p>
-            <strong>Nombre del Cliente:</strong>{" "}
-            {solicitudAsistencia?.solicitud.agenteVenta?.fullName}
-          </p>
-          <p>
-            <strong>Email del Cliente:</strong>{" "}
-            {solicitudAsistencia?.solicitud.agenteVenta?.email}
-          </p>
-        </Card>
-      </div>
+        <div className="card-solicitud">
+          <div className="section">
+            <h3 className="section-title">Datos del cliente</h3>
+            <Card className="p-mt-2 bg-1">
+              <p>
+                <strong>Nombre del Cliente:</strong>{" "}
+                {solicitudAsistencia?.solicitud.agenteVenta?.fullName}
+              </p>
+              <p>
+                <strong>Email del Cliente:</strong>{" "}
+                {solicitudAsistencia?.solicitud.agenteVenta?.email}
+              </p>
+            </Card>
+          </div>
+        </div>
 
-      <div className="section">
-        <h3 className="section-title">Datos de la Categoría</h3>
-        <Card className="p-mt-2">
-          <p>
-            <strong>Nombre de la Categoría:</strong>{" "}
-            {solicitudAsistencia?.solicitud.categoriaAsistencia?.nombre}
-          </p>
-          <p>
-            <strong>Estatus:</strong>{" "}
-            {solicitudAsistencia?.solicitud.categoriaAsistencia?.estatus
-              ? "Activa"
-              : "Inactiva"}
-          </p>
-        </Card>
+        <div className="card-solicitud">
+          <div className="section">
+            <h3 className="section-title">Datos de la Categoría</h3>
+            <Card className="p-mt-2 bg-3">
+              <p>
+                <strong>Nombre de la Categoría:</strong>{" "}
+                {solicitudAsistencia?.solicitud.categoriaAsistencia?.nombre}
+              </p>
+              <p>
+                <strong>Estatus:</strong>{" "}
+                {solicitudAsistencia?.solicitud.categoriaAsistencia?.estatus
+                  ? "Activa"
+                  : "Inactiva"}
+              </p>
+            </Card>
+          </div>
+        </div>
       </div>
 
       <div className="section">
         <h3 className="section-title">Seguimientos</h3>
         <Card className="p-mt-2">
-          {solicitudAsistencia?.solicitud.seguimientosSolicitudAsistencia
-            .length > 0 ? (
+          {solicitudAsistencia?.solicitud.seguimientosSolicitudAsistencia.length > 0 ? (
             <ListBox
               value={null}
-              options={
-                solicitudAsistencia?.solicitud
-                  .seguimientosSolicitudAsistencia || []
-              }
+              options={solicitudAsistencia?.solicitud.seguimientosSolicitudAsistencia || []}
               itemTemplate={(item) => (
                 <>
                   <div key={item.id}>
@@ -286,8 +278,7 @@ const DetalleSolicitudAsistenciaAgente = () => {
       >
         <div>
           <p>
-            ¿Estás seguro de que deseas eliminar esta solicitud? Esta acción no
-            se puede deshacer.
+            ¿Estás seguro de que deseas eliminar esta solicitud? Esta acción no se puede deshacer.
           </p>
           <InputText
             placeholder="Motivo de eliminación"
