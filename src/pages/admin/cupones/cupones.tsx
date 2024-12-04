@@ -31,13 +31,16 @@ const Cupones = () => {
     };
 
     const opcionesPaquete = [
+      { label: "Total de la compra", value: 0 },
       { label: "1 cerveza", value: 1 },
       { label: "6 cervezas", value: 6 },
       { label: "12 cervezas", value: 12 },
       { label: "24 cervezas", value: 24 },
     ];
 
-    const paqueteSeleccionado = opcionesPaquete.find(opcion => opcion.value === item.paquete);
+    const paqueteSeleccionado = opcionesPaquete.find(
+      (opcion) => opcion.value === item.paquete
+    );
 
     return (
       <div className="card-cupon" onClick={handleCardPress}>
@@ -47,24 +50,29 @@ const Cupones = () => {
         <div className="whiteSection">
           <h3 className="couponTitle">Código: {item.codigo}</h3>
           <p className="couponText">
-            {item.tipo === 1 ? `Monto máximo: ${item.montoMaximo} MXN` : `Monto mínimo: ${item.montoMinimo} MXN`}
+            {`Monto mínimo: ${item.montoMinimo} MXN`}
           </p>
           <p className="couponText">
-            Paquete: {paqueteSeleccionado ? paqueteSeleccionado.label : "Paquete no encontrado"}
+            Paquete:{" "}
+            {paqueteSeleccionado
+              ? paqueteSeleccionado.label
+              : "Paquete no encontrado"}
           </p>
           <p className="couponText">Cantidad de cupones: {item.cantidad}</p>
           <p className="couponText">Cupones usados: {item.usos}</p>
           <p className="couponText">
-            <p className="couponText">
-              Expira el:{" "}
-              {isNaN(new Date(item.fechaExpiracion).getTime())
-                ? "Fecha inválida"
-                : new Date(item.fechaExpiracion).toLocaleDateString()}
-            </p>
+            Expira el:{" "}
+            {isNaN(new Date(item.fechaExpiracion).getTime())
+              ? "Fecha inválida"
+              : new Date(item.fechaExpiracion).toLocaleDateString()}
           </p>
-          <p className="couponText">
-            Estatus: {item.activo ? "Activo" : "Inactivo"}
-          </p>
+
+          <div className="statusIndicator">
+            {item.activo ? "Activo" : "Inactivo"}
+            <span
+              className={`statusDot ${item.activo ? "active" : "inactive"}`}
+            ></span>
+          </div>
         </div>
       </div>
     );

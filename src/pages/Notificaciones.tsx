@@ -173,8 +173,14 @@ const Notificaciones = () => {
                     borderRadius: "50%",
                     margin: "0 10px",
                     backgroundColor: obtenerColorTipo(notificacion.tipo),
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    color: "#ffffff",
                   }}
-                ></div>
+                >
+                  <i className="pi pi-bell"></i>
+                </div>
 
                 {/* Contenido */}
                 <div style={{ flex: 1 }}>
