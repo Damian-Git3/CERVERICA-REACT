@@ -1,0 +1,40 @@
+.image-style {
+  width: 100%;
+  height: auto;
+  max-width: 10rem;
+  max-height: 150px;
+  object-fit: contain;
+}
+
+.image-container {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: 10px;
+  box-sizing: border-box;
+  border: 0.4rem solid #ffc107;
+}
+
+.title-style {
+  text-transform: uppercase;
+  font-size: 4rem;
+  font-weight: bold;
+  margin: 1rem 0;
+}
+
+.h-50 {
+  height: 50%;
+}
+
+.tag-style {
+  
+  transform: scale(1.6);
+}
+
+.tag-style > span {
+  text-transform: uppercase;
+  font-weight: bold;
+}
