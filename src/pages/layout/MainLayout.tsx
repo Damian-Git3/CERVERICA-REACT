@@ -8,7 +8,7 @@ export default function MainLayout() {
       <Navbar />
 
       {/* Contenedor principal */}
-      <div style={{ paddingLeft: "15rem", paddingRight: "15rem" }}>
+      <div style={{ paddingLeft: "10rem", paddingRight: "10rem", paddingTop: "8rem" }}>
         <Outlet />
       </div>
     </>
